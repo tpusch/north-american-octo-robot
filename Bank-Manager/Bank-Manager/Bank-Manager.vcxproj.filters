@@ -13,10 +13,60 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Accounts">
+      <UniqueIdentifier>{292a657d-064d-44c7-af05-55eb9258fac7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Accounts">
+      <UniqueIdentifier>{29c19ae7-6443-4b1d-a77e-24a3826a4247}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Customer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Account.cpp">
+      <Filter>Source Files\Accounts</Filter>
+    </ClCompile>
+    <ClCompile Include="Certificate_of_Deposit.cpp">
+      <Filter>Source Files\Accounts</Filter>
+    </ClCompile>
+    <ClCompile Include="Checking.cpp">
+      <Filter>Source Files\Accounts</Filter>
+    </ClCompile>
+    <ClCompile Include="Savings.cpp">
+      <Filter>Source Files\Accounts</Filter>
+    </ClCompile>
+    <ClCompile Include="Date.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Transaction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BankManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Customer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Account.h">
+      <Filter>Header Files\Accounts</Filter>
+    </ClInclude>
+    <ClInclude Include="Certificate_of_Deposit.h">
+      <Filter>Header Files\Accounts</Filter>
+    </ClInclude>
+    <ClInclude Include="Checking.h">
+      <Filter>Header Files\Accounts</Filter>
+    </ClInclude>
+    <ClInclude Include="Savings.h">
+      <Filter>Header Files\Accounts</Filter>
+    </ClInclude>
+    <ClInclude Include="Date.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Transaction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
