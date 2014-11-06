@@ -11,7 +11,6 @@ using std::ostream;
 using std::endl;
 using std::string;
 
-
 BankManager::BankManager(istream& inStream, ostream& outStream)
 	:in(inStream),
 	out(outStream),
