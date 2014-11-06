@@ -11,14 +11,13 @@ using std::ostream;
 using std::endl;
 using std::string;
 
-enum BankManager::state {submit_transaction, list_accounts, print_statement, print_savings, print_checking, print_cd, list_customers, save, exit, menu, default};
 
 BankManager::BankManager(istream& inStream, ostream& outStream)
 	:in(inStream),
 	out(outStream),
 	running(true)
 {
-	currentState = state::menu;
+	currentState = 0;
 	currentCustomer = NULL;
 }
 
@@ -39,44 +38,44 @@ void BankManager::run(){
 
 void BankManager::update(){
 	switch (currentState){
-	case state::menu:
+	case 0:
 		printHeader();
 		printMenu();
 		break;
-	case state::submit_transaction:
+	case 1:
 		out << "1. Submit a transaction\n";
 		break;
-	case state::list_accounts:
+	case 2:
 		out << "2. List all accounts\n";
 		break;
-	case state::print_statement:
+	case 3:
 		out << "3. Print a Monthly Statement\n";
 		break;
-	case state::print_savings:
+	case 4:
 		out << "4. Print Savings Value\n";
 		break;
-	case state::print_checking:
+	case 5:
 		out << "5. Print Checking Value\n";
 		break;
-	case state::print_cd:
+	case 6:
 		out << "6. Print CD Value\n";
 		break;
-	case state::list_customers:
+	case 7:
 		out << "7. List all Customers\n";
 		break;
-	case state::save:
+	case 8:
 		out << "8. Save\n";
 		break;
-	case state::exit:
+	case 9:
 		running = false;
 		break;
-	case state::default:
+	case 10:
 		out << "Enter a valid input\n";
-		currentState = state::menu;
+		currentState = 0;
 		break;
 	default:
 		out << "Enter a valid input\n";
-		currentState = state::menu;
+		currentState = 0;
 		break;
 	}
 }
@@ -109,7 +108,7 @@ void BankManager::printHeader(){
 void BankManager::handleInput(){
 	in >> choice;
 	if (!in){
-		currentState = state::default;
+		currentState = 10;
 		in.clear();
 		in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	}
@@ -120,45 +119,45 @@ void BankManager::handleInput(){
 
 	//Always available
 	if (choice == "0" || choice == "help"){
-		currentState = state::menu;
+		currentState = 0;
 	}
 	else if (choice == "quit" || choice == "exit"){
-		currentState = state::exit;
+		currentState = 9;
 	}
 }
 
 void BankManager::menuInput(string choice){
 	if (choice == "0" || choice == "help"){
-		currentState = state::menu;
+		currentState = 0;
 	}
 	else if(choice == "1"){
-		currentState = state::submit_transaction;
+		currentState = 1;
 	}
 	else if (choice == "2"){
-		currentState = state::list_accounts;
+		currentState = 2;
 	}
 	else if (choice == "3"){
-		currentState = state::print_statement;
+		currentState = 3;
 	}
 	else if (choice == "4"){
-		currentState = state::print_savings;
+		currentState = 4;
 	}
 	else if (choice == "5"){
-		currentState = state::print_checking;
+		currentState = 5;
 	}
 	else if (choice == "6"){
-		currentState = state::print_cd;
+		currentState = 6;
 	}
 	else if (choice == "7"){
-		currentState = state::list_customers;
+		currentState = 7;
 	}
 	else if (choice == "8"){
-		currentState = state::save;
+		currentState = 8;
 	}
 	else if (choice == "9" || choice == "quit" || choice == "exit"){
-		currentState = state::exit;
+		currentState = 9;
 	}
 	else{
-		currentState = state::default;
+		currentState = 10;
 	}
 }

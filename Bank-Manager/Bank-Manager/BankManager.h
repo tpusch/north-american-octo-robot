@@ -27,8 +27,7 @@ private:
 	bool inMenu;
 	bool running;
 
-	enum state;
-	state currentState;
+	int currentState;
 
 	std::string choice;
 
