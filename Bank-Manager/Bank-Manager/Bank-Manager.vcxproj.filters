@@ -42,11 +42,11 @@
     <ClCompile Include="Transaction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BankManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files\Accounts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
