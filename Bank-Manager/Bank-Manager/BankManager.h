@@ -7,6 +7,8 @@
 #include "Customer.h"
 #include "Transaction.h"
 
+using namespace std;
+
 class BankManager
 {
 public:
