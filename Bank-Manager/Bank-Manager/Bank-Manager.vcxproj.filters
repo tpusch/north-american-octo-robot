@@ -42,6 +42,9 @@
     <ClCompile Include="Transaction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="BankManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -68,5 +71,19 @@
     <ClInclude Include="Transaction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BankManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Customers.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Accounts.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Transactions.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

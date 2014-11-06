@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <list>
 #include <string>
 
@@ -28,8 +29,12 @@ public:
 	string getSSN(){ return ssn; }
 	void setSSN(const string&);
 
+	void printName(std::ostream&);
+
 	//returns a pointer to a list of account pointers
 	list<Account*>* getAccounts(){ return accountsPtr; }
+
+	//TODO: overload >> and <<
 
 private:
 	int customerID;
