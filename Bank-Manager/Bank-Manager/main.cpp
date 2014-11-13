@@ -5,8 +5,8 @@
 
 int main(){
 
-	BankManager bm = BankManager(std::cin, std::cout);
-	bm.run();
+	BankManager bankManager = BankManager(std::cin, std::cout);
+	bankManager.run();
 
 	return 0;
 }
