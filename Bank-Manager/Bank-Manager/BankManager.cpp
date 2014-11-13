@@ -97,9 +97,7 @@ void BankManager::printMenu(){
 void BankManager::printHeader(){
 	if (currentCustomer != NULL){
 		out << "------------------------------------\n"
-			<< "Current Customer: "; 
-		currentCustomer->printName(out);
-		out << "\n"
+			<< "Current Customer: " << currentCustomer << "\n"
 			<< "------------------------------------\n" << endl;
 	}
 }
