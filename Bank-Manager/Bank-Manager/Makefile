@@ -21,7 +21,7 @@ Savings.o:		    Savings.cpp Savings.h Account.h
 Checking.o:		    Checking.cpp Checking.h Account.h
 			    $(CXX) -c Checking.cpp
 
-Account.o:		    Account.cpp Account.h
+Account.o:		    Account.cpp Account.h Customer.h
 			    $(CXX) -c Account.cpp
 
 Transaction.o:		    Transaction.cpp Transaction.h
@@ -34,5 +34,5 @@ test:			    all
 			    ./main < testCaseMJW.input
 			    ./main < testCaseMDW.input
 
-clobber:	
+clean:	
 			    rm -f *.o core *.exe cbook
