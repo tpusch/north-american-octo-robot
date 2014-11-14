@@ -9,8 +9,3 @@ Transaction::Transaction()
 Transaction::~Transaction()
 {
 }
-
-
-void Transaction::save(std::ostream& out){
-
-}

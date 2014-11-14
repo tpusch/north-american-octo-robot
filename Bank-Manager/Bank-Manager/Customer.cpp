@@ -2,12 +2,14 @@
 
 using std::istream;
 using std::ostream;
-
+using std::ifstream;
+using std::ofstream;
 
 Customer::Customer()
-	:firstName("John"),
-	lastName("Doe"),
-	customerID(666)
+{
+}
+
+Customer::Customer(string line)
 {
 }
 
@@ -30,16 +32,12 @@ void Customer::printCDValue(){
 
 };
 
-void Customer::save(std::ostream& out){
-
-}
-
 ostream& operator<< (ostream& os, const Customer& customer){
-	os << customer.firstName << " " << customer.lastName;
+	os << customer.firstName << " " << customer.lastName << " " << customer.customerID << " " << customer.ssn << " " << customer.address;
 	return os;
 }
 
 istream& operator>> (istream& is, Customer& customer){
-	is >> customer.firstName >> customer.lastName;
+	is >> customer.firstName >> customer.lastName >> customer.customerID >> customer.ssn >> customer.address;
 	return is;
 }

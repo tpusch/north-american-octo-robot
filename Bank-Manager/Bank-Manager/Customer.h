@@ -14,6 +14,7 @@ class Customer
 	
 public:
 	Customer();
+	Customer(string);
 	~Customer();
 
 	int getID(){ return customerID; }
@@ -37,14 +38,13 @@ public:
 	void printSavingsValue();
 	void printCDValue();
 
-	void save(std::ostream&);
-
 	//returns a pointer to a list of account pointers
 	list<Account*>* getAccounts(){ return accountsPtr; }
 
 	//TODO: overload >> and <<
 	friend std::ostream& operator<< (std::ostream&, const Customer&);
 	friend std::istream& operator>> (std::istream&, Customer&);
+
 
 protected:
 	int customerID;

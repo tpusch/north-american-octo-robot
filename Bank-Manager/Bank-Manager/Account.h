@@ -8,7 +8,5 @@ public:
 	Account();
 	~Account();
 
-	void save(std::ostream&);
-
 };
 

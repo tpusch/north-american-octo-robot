@@ -34,6 +34,7 @@ private:
 	void listCustomers();
 	void printStatement();
 	void save();
+	void load();
 
 	bool inMenu;
 	bool running;

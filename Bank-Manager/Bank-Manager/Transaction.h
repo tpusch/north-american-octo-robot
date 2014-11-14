@@ -9,7 +9,5 @@ public:
 	~Transaction();
 
 
-	void save(std::ostream&);
-
 };
 

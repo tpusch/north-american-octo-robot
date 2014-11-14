@@ -18,7 +18,6 @@ BankManager::BankManager(istream& inStream, ostream& outStream)
 {
 	currentState = 0;
 	currentCustomer = NULL;
-	addCustomer();
 }
 
 BankManager::~BankManager()
@@ -27,6 +26,7 @@ BankManager::~BankManager()
 }
 
 void BankManager::run(){
+	load();
 	out << "<<O>><<O>> WELCOME TO ALL POWERFUL BANK, MAKE A SELECTION <<O>><<O>>\n"
 		<< "   ----                                                      ----   \n" << endl;
 	printMenu();
@@ -181,7 +181,7 @@ void BankManager::listCustomers(){
 	if (!customers.empty()){
 		for (unsigned i = 0; i < customers.size(); i++){
 			Customer customer = customers.at(i);
-			out << customer
+			out << customer.getFirstName() << " " << customer.getLastName()
 				<< "\nID: " << customer.getID()
 				<< "\nSSN: " << customer.getSSN()
 				<< "\nAddress: " << customer.getAddress()
@@ -205,32 +205,51 @@ void BankManager::printStatement(){
 	}	
 }
 
+template<typename T>
+void saveFile(vector<T>& vec, ofstream& outFile){
+	if (!vec.empty()){
+		for (unsigned i = 0; i < vec.size(); i++){
+			outFile << vec.at(i);
+			outFile << "\n";
+		}
+	}
+}
+
 void BankManager::save(){
 	ofstream accountFile, customerFile, transactionFile;
 	accountFile.open("Accounts.txt", ios::out);
 	customerFile.open("Customers.txt", ios::out);
 	transactionFile.open("Transactions.txt", ios::out);
 	
-	if (!accounts.empty()){
-		for (unsigned i = 0; i < accounts.size(); i++){
-			accounts.at(i).save(accountFile);
-			accountFile << "\n";
-		}
-	}
-	if (!customers.empty()){
-		for (unsigned i = 0; i < customers.size(); i++){
-			customers.at(i).save(customerFile);
-			customerFile << "\n";
-		}
-	}
-	if (!transactions.empty()){
-		for (unsigned i = 0; i < transactions.size(); i++){
-			transactions.at(i).save(transactionFile);
-			transactionFile << "\n";
-		}
-	}
+	//saveFile(accounts, accountFile);
+	saveFile(customers, customerFile);
+	//saveFile(transactions, transactionFile);
 
 	accountFile.close();
 	customerFile.close();
 	transactionFile.close();
 }
+
+template<typename T>
+void loadFile(vector<T>& vec, ifstream& inFile){
+	T temp = T();
+	while (!inFile.eof()){
+		inFile >> temp;
+		vec.push_back(temp);
+	}
+}
+
+void BankManager::load(){
+	ifstream accountFile, customerFile, transactionFile;
+	accountFile.open("Accounts.txt", ios::in);
+	customerFile.open("Customers.txt", ios::in);
+	transactionFile.open("Transactions.txt", ios::in);
+	//loadFile(accounts, accountFile);
+	loadFile(customers, customerFile);
+	//loadFile(transactions, transactionFile);
+
+	accountFile.close();
+	customerFile.close();
+	transactionFile.close();
+}
+
