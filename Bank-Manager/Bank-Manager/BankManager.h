@@ -1,7 +1,9 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include <list>
 #include <string>
+#include <vector>
 
 #include "Account.h"
 #include "Customer.h"
@@ -26,6 +28,13 @@ private:
 
 	void handleInput();
 
+	void addCustomer();
+
+	void listAccounts();
+	void listCustomers();
+	void printStatement();
+	void save();
+
 	bool inMenu;
 	bool running;
 
@@ -38,8 +47,7 @@ private:
 
 	Customer* currentCustomer;
 
-	list<Customer> customers;
-	list<Account> accounts;
-	list<Transaction> transactions;
+	vector<Customer> customers;
+	vector<Account> accounts;
+	vector<Transaction> transactions;
 };
-

@@ -5,6 +5,9 @@ using std::ostream;
 
 
 Customer::Customer()
+	:firstName("John"),
+	lastName("Doe"),
+	customerID(666)
 {
 }
 
@@ -27,6 +30,9 @@ void Customer::printCDValue(){
 
 };
 
+void Customer::save(std::ostream& out){
+
+}
 
 ostream& operator<< (ostream& os, const Customer& customer){
 	os << customer.firstName << " " << customer.lastName;

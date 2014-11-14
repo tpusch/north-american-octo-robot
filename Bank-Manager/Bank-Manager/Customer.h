@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include <list>
 #include <string>
 
@@ -35,6 +36,8 @@ public:
 	void printCheckingValue();
 	void printSavingsValue();
 	void printCDValue();
+
+	void save(std::ostream&);
 
 	//returns a pointer to a list of account pointers
 	list<Account*>* getAccounts(){ return accountsPtr; }

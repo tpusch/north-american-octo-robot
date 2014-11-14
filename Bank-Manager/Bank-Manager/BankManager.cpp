@@ -18,6 +18,7 @@ BankManager::BankManager(istream& inStream, ostream& outStream)
 {
 	currentState = 0;
 	currentCustomer = NULL;
+	addCustomer();
 }
 
 BankManager::~BankManager()
@@ -46,9 +47,11 @@ void BankManager::update(){
 		break;
 	case 2:
 		out << "2. List all accounts\n";
+		listAccounts();
 		break;
 	case 3:
 		out << "3. Print a Monthly Statement\n";
+		printStatement();			
 		break;
 	case 4:
 		out << "4. Print Savings Value\n";
@@ -61,9 +64,11 @@ void BankManager::update(){
 		break;
 	case 7:
 		out << "7. List all Customers\n";
+		listCustomers();
 		break;
 	case 8:
 		out << "8. Save\n";
+		save();
 		break;
 	case 9:
 		running = false;
@@ -81,7 +86,7 @@ void BankManager::update(){
 
 void BankManager::printMenu(){
 	//out << "\nWELCOME TO ALL POWERFUL BANK, PLEASE MAKE A SELECTION\n" << endl
-	out << "Type \"help\" at any time to return to this menu\n"
+	out << "Type \"menu\" at any time to return to this menu\n"
 		<< "Type \"quit\" at any time to stop the program\n\n"
 		<< "1. Submit a Transaction\n"
 		<< "2. List all Accounts\n"
@@ -110,7 +115,7 @@ void BankManager::handleInput(){
 		in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	}
 	
-	//if (currentState == state::menu){
+	//if (currentState == 0){
 		menuInput(choice);		
 	//}
 
@@ -157,4 +162,75 @@ void BankManager::menuInput(string choice){
 	else{
 		currentState = 10;
 	}
+}
+
+void BankManager::addCustomer(){
+	Customer customer = Customer();
+	customers.push_back(customer);
+}
+
+void BankManager::listAccounts(){
+	if (!accounts.empty()){
+		for (unsigned i = 0; i < accounts.size(); i++){
+			//out << accounts.at(i) << "\n";
+		}
+	}
+}
+
+void BankManager::listCustomers(){
+	if (!customers.empty()){
+		for (unsigned i = 0; i < customers.size(); i++){
+			Customer customer = customers.at(i);
+			out << customer
+				<< "\nID: " << customer.getID()
+				<< "\nSSN: " << customer.getSSN()
+				<< "\nAddress: " << customer.getAddress()
+				<< "\n\n";
+		}
+	}
+}
+
+void BankManager::printStatement(){
+	int accountNumber;
+	out << "Enter an account number to print: ";
+	in >> accountNumber;
+	
+	if (!accounts.empty()){
+		for (unsigned i = 0; i < accounts.size(); i++){
+			//do output
+			//if (accounts.at(i).getID() == accountNumber){
+			//	accounts.at(i).printStatement();
+			//}
+		}
+	}	
+}
+
+void BankManager::save(){
+	ofstream accountFile, customerFile, transactionFile;
+	accountFile.open("Accounts.txt", ios::out);
+	customerFile.open("Customers.txt", ios::out);
+	transactionFile.open("Transactions.txt", ios::out);
+	
+	if (!accounts.empty()){
+		for (unsigned i = 0; i < accounts.size(); i++){
+			accounts.at(i).save(accountFile);
+			accountFile << "\n";
+		}
+	}
+	if (!customers.empty()){
+		for (unsigned i = 0; i < customers.size(); i++){
+			customers.at(i).save(customerFile);
+			customerFile << "\n";
+		}
+	}
+	if (!transactions.empty()){
+		for (unsigned i = 0; i < transactions.size(); i++){
+			transactions.at(i).save(transactionFile);
+			transactionFile << "\n";
+		}
+	}
+
+	accountFile.close();
+	customerFile.close();
+	transactionFile.close();
 }
