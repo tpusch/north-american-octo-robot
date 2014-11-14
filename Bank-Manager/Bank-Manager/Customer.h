@@ -3,7 +3,6 @@
 #include <fstream>
 #include <list>
 #include <string>
-
 #include "Account.h"
 
 using std::list;
@@ -39,7 +38,7 @@ public:
 	void printCDValue();
 
 	//returns a pointer to a list of account pointers
-	list<Account*>* getAccounts(){ return accountsPtr; }
+//	list<Account*>* getAccounts(){ return accountsPtr; }
 
 	//TODO: overload >> and <<
 	friend std::ostream& operator<< (std::ostream&, const Customer&);
