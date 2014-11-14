@@ -2,7 +2,6 @@
 #include <iostream>
 #include <list>
 #include <string>
-
 #include "Account.h"
 
 using std::list;
@@ -32,7 +31,7 @@ public:
 	void printName(std::ostream&);
 
 	//returns a pointer to a list of account pointers
-	list<Account*>* getAccounts(){ return accountsPtr; }
+//	list<Account*>* getAccounts(){ return accountsPtr; }
 
 	//TODO: overload >> and <<
 
@@ -46,8 +45,8 @@ private:
 	string ssn;
 
 	//A list of pointers, pointing to accounts
-	list<Account*> accounts;
-	//A pointer pointing to a list of account pointers
-	list<Account*>* accountsPtr;
+//	list<Account*> accounts;
+//	//A pointer pointing to a list of account pointers
+//	list<Account*>* accountsPtr;
 };
 
