@@ -1,10 +1,11 @@
 #pragma once
 #include <iostream>
 #include <cstdlib>
-#include "Transaction.h"
-#include "Customer.h"
-#include "Date.h"
 #include <vector>
+#include "Date.h"
+
+#include "Customer.h"
+#include "Transaction.h"
 
 using namespace std;
 
@@ -16,7 +17,7 @@ public:
     virtual ~Account(){}
 
     //prototypes
-    void addTransaction(const Transaction&);
+    void addTransaction(Transaction);
     void sortTransactions();
     void generateReport(ostream&);
     

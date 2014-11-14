@@ -1,5 +1,4 @@
 #include "Transaction.h"
-#include "Date.h"
 
 //overload extraction operator
 istream& operator>>(istream& input, Transaction& transaction)

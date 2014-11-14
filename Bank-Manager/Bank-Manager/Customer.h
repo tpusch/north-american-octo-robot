@@ -3,10 +3,13 @@
 #include <fstream>
 #include <list>
 #include <string>
-#include "Account.h"
+#include <vector>
+
+class Account;
 
 using std::list;
 using std::string;
+using std::vector;
 
 class Customer
 {
@@ -55,9 +58,9 @@ protected:
 	string ssn;
 
 	//A list of pointers, pointing to accounts
-	list<Account*> accounts;
+//	vector<Account> accounts;
 	//A pointer pointing to a list of account pointers
 	//This is a single pointer
-	list<Account*>* accountsPtr;
+//	vector<Account> accountsPtr;
 };
 
