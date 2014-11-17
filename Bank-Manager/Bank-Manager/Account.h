@@ -3,7 +3,6 @@
 #include <cstdlib>
 #include <vector>
 #include "Date.h"
-
 #include "Customer.h"
 #include "Transaction.h"
 
@@ -17,17 +16,19 @@ public:
     virtual ~Account(){}
 
     //prototypes
-    void addTransaction(Transaction);
+    void addTransaction(const Transaction*);
     void sortTransactions();
     void generateReport(ostream&);
     
     //simple one line accessors
-    vector<Transaction*> getTransactions(){ return transactions; }
+    vector<const Transaction*> getTransactions(){ return transactions; }
+    double getBalance(){ return balance; }
+    void updateBalance(double rate){ balance -= balance * rate; }
 
 private:
     double balance;
     int accountID;
     Date dateOpened;
-    vector<Transaction*> transactions;
+    vector<const Transaction*> transactions;
     vector<Customer*> customers;
 };

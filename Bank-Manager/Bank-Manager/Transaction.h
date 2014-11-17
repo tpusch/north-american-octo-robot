@@ -19,10 +19,10 @@ public:
     bool operator<(const Transaction&) const;
     
     //simple one line accessors
-    Date getDate() { return time; }
-    char getType() { return type; }
-    string getLocation() { return location; }
-    double getAmount() { return amount; }
+    Date getDate() const { return time; }
+    char getType() const { return type; }
+    string getLocation() const { return location; }
+    double getAmount() const { return amount; }
 
 private:
     char type;

@@ -1,14 +1,12 @@
 #include "Account.h"
-#include "Transaction.h"
-#include "Date.h"
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
 
 //method to add transactions to vector
-void Account::addTransaction(Transaction newTran)
+void Account::addTransaction(const Transaction* newTran)
 {
-	//transactions.push_back(newTran);
+    transactions.push_back(newTran);
 }
 
 //method to sort transactions vector
@@ -38,22 +36,22 @@ void Account::generateReport(ostream& output)
         output << transactions[i];        
         
         //add to balance
-		if (transactions[i]->getType() == 'd' || transactions[i]->getType() == 'D')
+        if (transactions[i]->getType() == 'd' || transactions[i]->getType() == 'D')
         {
-			balance += transactions[i]->getAmount();
+            balance += transactions[i]->getAmount();
         }
         
         //check for overdraft and update balance
-		if (transactions[i]->getType() == 'w' || transactions[i]->getType() == 'W')
+        if (transactions[i]->getType() == 'w' || transactions[i]->getType() == 'W')
         {
-			if (balance >= transactions[i]->getAmount())
+            if (balance >= transactions[i]->getAmount())
             {
-				balance -= transactions[i]->getAmount();
+                balance -= transactions[i]->getAmount();
             }
             //if withdrawal exceeds balance, print overdraft message and remove 25 from balance
             else
             {
-				output << "Failed!\n" << transactions[i]->getDate();
+                output << "Failed!\n" << transactions[i]->getDate();
                 output << " Overdraft Fee, $25.00 to bank. ";
                 balance -= 25;
             }

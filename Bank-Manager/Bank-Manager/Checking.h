@@ -1,10 +1,18 @@
 #pragma once
 #include "Account.h"
-class Checking :
-	public Account
+#include "Transaction.h"
+
+class Checking : public Account
 {
 public:
-	Checking();
-	~Checking();
+    //constructor/destructor
+    Checking();
+    ~Checking();
+    
+    //prototypes
+    void checkOverdraft(const Transaction&);
+    
+private:
+    double monthlyFee;
 };
 
