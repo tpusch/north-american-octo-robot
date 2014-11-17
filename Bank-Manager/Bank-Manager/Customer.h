@@ -7,6 +7,7 @@
 
 class Account;
 
+using namespace std;
 using std::list;
 using std::string;
 using std::vector;
@@ -15,52 +16,54 @@ class Customer
 {
 	
 public:
-	Customer();
-	Customer(string);
-	~Customer();
+    //constructor/destructor
+    Customer();
+    Customer(string);
+    ~Customer();
 
-	int getID(){ return customerID; }
-	void setID(const int);
+    //accessors/setters
+    int getID(){ return customerID; }
+    void setID(const int id){ customerID = id; }
 
-	string getFirstName(){ return firstName; }
-	void setFirstName(const string&);
+    string getFirstName(){ return firstName; }
+    void setFirstName(const string& fname){ firstName = fname; }
 
-	string getLastName(){ return lastName; }
-	void setLastName(const string&);
+    string getLastName(){ return lastName; }
+    void setLastName(const string& lname){ lastName = lname; }
 
-	string getAddress(){ return address; }
-	void setAddress(const string&);
+    string getAddress(){ return address; }
+    void setAddress(const string& add){ address = add; }
 
-	string getSSN(){ return ssn; }
-	void setSSN(const string&);
+    string getSSN(){ return ssn; }
+    void setSSN(const string& social){ ssn = social; }
 
-	void listAccounts();
-	
-	void printCheckingValue();
-	void printSavingsValue();
-	void printCDValue();
+    void listAccounts();
 
-	//returns a pointer to a list of account pointers
-//	list<Account*>* getAccounts(){ return accountsPtr; }
+    void printCheckingValue();
+    void printSavingsValue();
+    void printCDValue();
 
-	//TODO: overload >> and <<
-	friend std::ostream& operator<< (std::ostream&, const Customer&);
-	friend std::istream& operator>> (std::istream&, Customer&);
+    //returns a pointer to a list of account pointers
+    vector<Account*> getAccounts(){ return accountsPtr; }
+
+    //TODO: overload >> and <<
+    friend std::ostream& operator<< (std::ostream&, const Customer&);
+    friend std::istream& operator>> (std::istream&, Customer&);
 
 
 protected:
-	int customerID;
+    int customerID;
 
-	string firstName;
-	string lastName;
+    string firstName;
+    string lastName;
 
-	string address;
-	string ssn;
+    string address;
+    string ssn;
 
-	//A list of pointers, pointing to accounts
-//	vector<Account> accounts;
-	//A pointer pointing to a list of account pointers
-	//This is a single pointer
-//	vector<Account> accountsPtr;
+    //A list of pointers, pointing to accounts
+    vector<Account*> accounts;
+    //A pointer pointing to a list of account pointers
+    //This is a single pointer
+    vector<Account*> accountsPtr;
 };
 

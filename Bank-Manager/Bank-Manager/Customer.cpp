@@ -1,5 +1,6 @@
 #include "Customer.h"
 
+using namespace std;
 using std::istream;
 using std::ostream;
 using std::ifstream;
@@ -19,11 +20,14 @@ Customer::~Customer()
 }
 
 void Customer::listAccounts(){
-
+    for (unsigned i = 0; i < accountsPtr.size(); i++)
+    {
+        cout << getAccounts()[i];
+    }
 };
 
 void Customer::printCheckingValue(){
-
+    
 };
 void Customer::printSavingsValue(){
 
