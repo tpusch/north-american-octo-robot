@@ -22,6 +22,7 @@ public:
     
     //simple one line accessors
     vector<const Transaction*> getTransactions(){ return transactions; }
+    vector<Customer*> getCustomers(){ return customers; }
     double getBalance(){ return balance; }
     void updateBalance(double rate){ balance -= balance * rate; }
 
