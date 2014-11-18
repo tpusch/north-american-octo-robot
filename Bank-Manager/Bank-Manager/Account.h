@@ -24,7 +24,7 @@ public:
     vector<const Transaction*> getTransactions(){ return transactions; }
     vector<Customer*> getCustomers(){ return customers; }
     double getBalance(){ return balance; }
-    void updateBalance(double rate){ balance -= balance * rate; }
+    void updateBalance(double rate){ balance += balance * rate; }
 
 private:
     double balance;

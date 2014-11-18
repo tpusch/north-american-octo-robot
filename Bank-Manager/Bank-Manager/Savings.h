@@ -4,9 +4,8 @@
 class Savings : public Account
 {
 public:
-    //constructor/destructor
+    //constructor
     Savings();
-    ~Savings();
     
     //prototypes
     void compoundMonthly();

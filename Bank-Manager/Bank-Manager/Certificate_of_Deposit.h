@@ -5,9 +5,8 @@
 class Certificate_of_Deposit : public Account
 {
 public:
-    //constructor/destructor
+    //constructor
     Certificate_of_Deposit();
-    ~Certificate_of_Deposit();
     
     //prototypes
     void compoundMonthly();

@@ -20,10 +20,10 @@ Customer::~Customer()
 }
 
 void Customer::listAccounts(){
-    for (unsigned i = 0; i < accountsPtr.size(); i++)
-    {
-        cout << getAccounts()[i];
-    }
+//    for (unsigned i = 0; i < accountsPtr.size(); i++)
+//    {
+//        cout << getAccounts()[i];
+//    }
 };
 
 void Customer::printCheckingValue(){

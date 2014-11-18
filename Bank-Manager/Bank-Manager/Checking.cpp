@@ -6,10 +6,6 @@ Checking::Checking()
 {
 }
 
-Checking::~Checking()
-{
-}
-
 void Checking::checkOverdraft(const Transaction& tran)
 {
     if (tran.getAmount() > getBalance())

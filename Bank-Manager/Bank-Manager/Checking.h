@@ -7,7 +7,6 @@ class Checking : public Account
 public:
     //constructor/destructor
     Checking();
-    ~Checking();
     
     //prototypes
     void checkOverdraft(const Transaction&);
