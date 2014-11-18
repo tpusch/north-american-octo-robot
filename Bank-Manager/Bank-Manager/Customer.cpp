@@ -45,3 +45,7 @@ istream& operator>> (istream& is, Customer& customer){
 	is >> customer.firstName >> customer.lastName >> customer.customerID >> customer.ssn >> customer.address;
 	return is;
 }
+
+void Customer::save(ostream& output){
+	output << firstName << " " << lastName << " " << customerID << " " << ssn << " " << address; 
+}

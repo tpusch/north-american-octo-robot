@@ -61,3 +61,7 @@ void Account::generateReport(ostream& output)
         output << "Balance: $" << balance << "\n";
     }
 }
+
+void Account::save(ostream& output){
+
+}

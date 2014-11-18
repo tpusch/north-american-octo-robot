@@ -41,3 +41,7 @@ bool Transaction::operator<(const Transaction& transaction) const
     }
     return (time < transaction.time);
 }
+
+void Transaction::save(ostream& output){
+
+}

@@ -20,6 +20,8 @@ public:
     void sortTransactions();
     void generateReport(ostream&);
     
+	void save(ostream&);
+
     //simple one line accessors
     vector<const Transaction*> getTransactions(){ return transactions; }
     vector<Customer*> getCustomers(){ return customers; }

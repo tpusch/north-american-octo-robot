@@ -208,21 +208,22 @@ template<typename T>
 void saveFile(vector<T>& vec, ofstream& outFile){
     if (!vec.empty()){
         for (unsigned i = 0; i < vec.size(); i++){
-            outFile << vec.at(i);
-            outFile << "\n";
+			vec.at(i).save(outFile);
+			outFile << "\n";
         }
     }
 }
 
 void BankManager::save(){
     ofstream accountFile, customerFile, transactionFile;
-    accountFile.open("Accounts.txt", ios::out);
+    
+	accountFile.open("Accounts.txt", ios::out);
     customerFile.open("Customers.txt", ios::out);
     transactionFile.open("Transactions.txt", ios::out);
 	
     //saveFile(accounts, accountFile);
     saveFile(customers, customerFile);
-    saveFile(transactions, transactionFile);
+    //saveFile(transactions, transactionFile);
 
     accountFile.close();
     customerFile.close();
@@ -243,9 +244,10 @@ void BankManager::load(){
     accountFile.open("Accounts.txt", ios::in);
     customerFile.open("Customers.txt", ios::in);
     transactionFile.open("Transactions.txt", ios::in);
-    //loadFile(accounts, accountFile);
+    
+	//loadFile(accounts, accountFile);
     loadFile(customers, customerFile);
-    loadFile(transactions, transactionFile);
+    //loadFile(transactions, transactionFile);
 
     accountFile.close();
     customerFile.close();

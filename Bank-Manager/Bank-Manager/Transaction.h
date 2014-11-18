@@ -18,6 +18,8 @@ public:
     friend ostream& operator<<(ostream&, const Transaction&);
     bool operator<(const Transaction&) const;
     
+	void save(ostream&);
+
     //simple one line accessors
     Date getDate() const { return time; }
     char getType() const { return type; }

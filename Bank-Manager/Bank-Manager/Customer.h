@@ -44,6 +44,8 @@ public:
     void printSavingsValue();
     void printCDValue();
 
+	void save(ostream&);
+
     //returns a pointer to a list of account pointers
     vector<Account*> getAccounts(){ return accountsPtr; }
 
