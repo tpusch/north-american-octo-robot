@@ -10,11 +10,6 @@ Customer::Customer()
 {
 }
 
-Customer::Customer(string line)
-{
-}
-
-
 Customer::~Customer()
 {
 }
@@ -26,23 +21,27 @@ void Customer::listAccounts(){
 //    }
 };
 
-void Customer::printCheckingValue(){
-    
-};
-void Customer::printSavingsValue(){
-
-};
-void Customer::printCDValue(){
-
-};
-
 ostream& operator<< (ostream& os, const Customer& customer){
 	os << customer.firstName << " " << customer.lastName << " " << customer.customerID << " " << customer.ssn << " " << customer.address;
 	return os;
 }
 
 istream& operator>> (istream& is, Customer& customer){
-	is >> customer.firstName >> customer.lastName >> customer.customerID >> customer.ssn >> customer.address;
+	string input;
+	is >> customer.firstName >> customer.lastName >> customer.customerID >> customer.ssn;
+	cerr << customer.firstName << customer.lastName << customer.customerID << customer.ssn;
+	is >> input;
+	while (input != "end"){
+		cerr << input << endl;
+		if (input == "accountID:"){
+			//TODO this
+			cout << "got an acct" << endl;
+		}
+		if (input == "address:"){
+			is >> customer.address;
+		}
+		is >> input;
+	}
 	return is;
 }
 

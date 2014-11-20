@@ -11,6 +11,7 @@ using std::ostream;
 using std::endl;
 using std::string;
 
+//Creates a new bank manager given an input stream and an output stream.
 BankManager::BankManager(istream& inStream, ostream& outStream)
     :in(inStream),
     out(outStream),
@@ -20,10 +21,12 @@ BankManager::BankManager(istream& inStream, ostream& outStream)
 	currentCustomer = NULL;
     }
 
+//Default Destructor
 BankManager::~BankManager()
 {
 }
 
+//Runs the program until state changes to exit.
 void BankManager::run(){
     load();
     out << "<<O>><<O>> WELCOME TO ALL POWERFUL BANK, MAKE A SELECTION <<O>><<O>>\n"
@@ -35,54 +38,82 @@ void BankManager::run(){
     }
 }
 
+//Updates the screen based on the current program state.
 void BankManager::update(){
     switch (currentState){
-    case 0:
+    case 0: //Menu
         printHeader();
         printMenu();
         break;
-    case 1:
+    case 1: //Submit a transaction
         out << "1. Submit a transaction\n";
         break;
-    case 2:
+    case 2: //List all accounts for a given customer
         out << "2. List all accounts\n";
         listAccounts();
         break;
-    case 3:
+    case 3: //Print a Monthly statement for a specific account
         out << "3. Print a Monthly Statement\n";
         printStatement();			
         break;
-    case 4:
+    case 4: //Print the total savings value
         out << "4. Print Savings Value\n";
+		//TODO 
         break;
-    case 5:
+    case 5: //Print the total Checking value
         out << "5. Print Checking Value\n";
+		//TODO
         break;
-    case 6:
+    case 6: //Print the total CD value
         out << "6. Print CD Value\n";
+		//TODO 
         break;
-    case 7:
+    case 7: //List all customers 
+			//TODO and the total value of all their accounts
         out << "7. List all Customers\n";
         listCustomers();
         break;
-    case 8:
+    case 8: //Save accounts, transactions, and customers
         out << "8. Save\n";
         save();
         break;
-    case 9:
+    case 9: //Exit the program
         running = false;
         break;
-    case 10:
+    case 10: //Invalid input
         out << "Enter a valid input\n";
         currentState = 0;
         break;
-    default:
+    default: //Invalid input
         out << "Enter a valid input\n";
         currentState = 0;
         break;
     }
 }
 
+//Handles keyboard input based on state
+void BankManager::handleInput(){
+	in >> choice;
+	if (!in){
+		currentState = 10;
+		in.clear();
+		in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	}
+
+	//if (currentState == 0){
+	menuInput(choice);
+	//}
+
+	//Always available
+	if (choice == "0" || choice == "menu"){
+		currentState = 0;
+	}
+	else if (choice == "quit" || choice == "exit"){
+		currentState = 9;
+	}
+}
+
+//Prints the main menu.
 void BankManager::printMenu(){
     //out << "\nWELCOME TO ALL POWERFUL BANK, PLEASE MAKE A SELECTION\n" << endl
     out << "Type \"menu\" or \"0\" at any time to return to this menu.\n"
@@ -98,6 +129,7 @@ void BankManager::printMenu(){
         << "9. Exit\n" << endl;
 }
 
+//Prints the header showing current customer.
 void BankManager::printHeader(){
     if (currentCustomer != NULL){
         out << "------------------------------------\n"
@@ -106,27 +138,7 @@ void BankManager::printHeader(){
     }
 }
 
-void BankManager::handleInput(){
-    in >> choice;
-    if (!in){
-        currentState = 10;
-        in.clear();
-        in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
-	
-    //if (currentState == 0){
-        menuInput(choice);		
-    //}
-
-    //Always available
-    if (choice == "0" || choice == "menu"){
-        currentState = 0;
-    }
-    else if (choice == "quit" || choice == "exit"){
-        currentState = 9;
-    }
-}
-
+//Changes the state based on the users choice.
 void BankManager::menuInput(string choice){
     if (choice == "0" || choice == "menu"){
         currentState = 0;
@@ -163,19 +175,19 @@ void BankManager::menuInput(string choice){
     }
 }
 
+//TODO add a new customer.
 void BankManager::addCustomer(){
     Customer customer = Customer();
     customers.push_back(customer);
 }
 
+//TODO list all accounts for the current customer.
 void BankManager::listAccounts(){
-    if (!accounts.empty()){
-        for (unsigned i = 0; i < accounts.size(); i++){
-            //out << accounts.at(i) << "\n";
-        }
-    }
+    
 }
 
+//Lists all saved customers.
+//TODO and the value of their accounts.
 void BankManager::listCustomers(){
     if (!customers.empty()){
         for (unsigned i = 0; i < customers.size(); i++){
@@ -189,6 +201,7 @@ void BankManager::listCustomers(){
     }
 }
 
+//TODO print a statement for an account to be selected.
 void BankManager::printStatement(){
     int accountNumber;
     out << "Enter an account number to print: ";
@@ -204,6 +217,7 @@ void BankManager::printStatement(){
     }	
 }
 
+//Template saves to a file.
 template<typename T>
 void saveFile(vector<T>& vec, ofstream& outFile){
     if (!vec.empty()){
@@ -214,6 +228,7 @@ void saveFile(vector<T>& vec, ofstream& outFile){
     }
 }
 
+//Opens all files and overwrites contents based on current accounts, transactions, and customers.
 void BankManager::save(){
     ofstream accountFile, customerFile, transactionFile;
     
@@ -230,6 +245,7 @@ void BankManager::save(){
     transactionFile.close();
 }
 
+//Template loads from a file.
 template<typename T>
 void loadFile(vector<T>& vec, ifstream& inFile){
     T temp = T();
@@ -239,6 +255,7 @@ void loadFile(vector<T>& vec, ifstream& inFile){
     }
 }
 
+//Opens all files and fills accounts, transactions, and customers based on contents.
 void BankManager::load(){
     ifstream accountFile, customerFile, transactionFile;
     accountFile.open("Accounts.txt", ios::in);

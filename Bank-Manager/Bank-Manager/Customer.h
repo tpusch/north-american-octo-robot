@@ -19,40 +19,24 @@ class Customer
 public:
     //constructor/destructor
     Customer();
-    Customer(string);
     ~Customer();
 
-    //accessors/setters
-    int getID(){ return customerID; }
-    void setID(const int id){ customerID = id; }
-
-    string getFirstName(){ return firstName; }
-    void setFirstName(const string& fname){ firstName = fname; }
-
-    string getLastName(){ return lastName; }
-    void setLastName(const string& lname){ lastName = lname; }
-
-    string getAddress(){ return address; }
-    void setAddress(const string& add){ address = add; }
-
-    string getSSN(){ return ssn; }
-    void setSSN(const string& social){ ssn = social; }
-
     void listAccounts();
-
-    void printCheckingValue();
-    void printSavingsValue();
-    void printCDValue();
-
 	void save(ostream&);
 
     //returns a pointer to a list of account pointers
     vector<Account*> getAccounts(){ return accountsPtr; }
 
-    //TODO: overload >> and <<
+    //overloaded operators
     friend std::ostream& operator<< (std::ostream&, const Customer&);
     friend std::istream& operator>> (std::istream&, Customer&);
 
+	//Simple getters
+	int getID(){ return customerID; }
+	string getFirstName(){ return firstName; }
+	string getLastName(){ return lastName; }
+	string getAddress(){ return address; }
+	string getSSN(){ return ssn; }
 
 protected:
     int customerID;
