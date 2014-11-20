@@ -3,6 +3,7 @@
 #include "BankManager.h"
 
 
+
 int main(){
 
 	BankManager bankManager = BankManager(std::cin, std::cout);

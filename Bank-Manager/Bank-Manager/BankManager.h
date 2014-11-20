@@ -19,6 +19,7 @@ public:
 
 	void run();
 
+	
 private:
 	void menuInput(std::string);
 	void update();
@@ -47,7 +48,8 @@ private:
 	std::ostream& out;
 
 	Customer* currentCustomer;
-
+	int currentAccount;
+	
 	vector<Customer> customers;
 	vector<Account> accounts;
 	vector<Transaction> transactions;

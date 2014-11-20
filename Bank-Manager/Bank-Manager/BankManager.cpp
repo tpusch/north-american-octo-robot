@@ -31,16 +31,17 @@ void BankManager::run(){
     load();
     out << "<<O>><<O>> WELCOME TO ALL POWERFUL BANK, MAKE A SELECTION <<O>><<O>>\n"
         << "   ----                                                      ----   \n" << endl;
-    printMenu();
+    //printMenu();
     while (running){
-        handleInput();
-        update();
+		update();
+		handleInput();
+        //update();
     }
 }
 
 //Updates the screen based on the current program state.
 void BankManager::update(){
-    switch (currentState){
+	switch (currentState){
     case 0: //Menu
         printHeader();
         printMenu();
@@ -99,43 +100,25 @@ void BankManager::handleInput(){
 		in.clear();
 		in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	}
-
-	//if (currentState == 0){
-	menuInput(choice);
-	//}
-
 	//Always available
-	if (choice == "0" || choice == "menu"){
+	if (choice == "menu"){
 		currentState = 0;
+		return;
 	}
 	else if (choice == "quit" || choice == "exit"){
 		currentState = 9;
+		return;
 	}
-}
 
-//Prints the main menu.
-void BankManager::printMenu(){
-    //out << "\nWELCOME TO ALL POWERFUL BANK, PLEASE MAKE A SELECTION\n" << endl
-    out << "Type \"menu\" or \"0\" at any time to return to this menu.\n"
-        << "Type \"quit\" or \"exit\" at any time to stop the program\n\n"
-        << "1. Submit a Transaction\n"
-        << "2. List all Accounts\n"
-        << "3. Print a Monthly Statement\n"
-        << "4. Print Savings Value\n"
-        << "5. Print Checking Value\n"
-        << "6. Print CD Value\n"
-        << "7. List all Customers\n"
-        << "8. Save\n"
-        << "9. Exit\n" << endl;
-}
+	if (currentState == 0){
+		menuInput(choice);
+	}
 
-//Prints the header showing current customer.
-void BankManager::printHeader(){
-    if (currentCustomer != NULL){
-        out << "------------------------------------\n"
-            << "Current Customer: " << currentCustomer << "\n"
-            << "------------------------------------\n" << endl;
-    }
+	if (currentState == 3){
+		currentAccount = stoi(choice);
+	}
+
+	
 }
 
 //Changes the state based on the users choice.
@@ -175,6 +158,33 @@ void BankManager::menuInput(string choice){
     }
 }
 
+//Prints the main menu.
+void BankManager::printMenu(){
+    //out << "\nWELCOME TO ALL POWERFUL BANK, PLEASE MAKE A SELECTION\n" << endl
+    out << "Type \"menu\" at any time to return to this menu.\n"
+        << "Type \"quit\" or \"exit\" at any time to stop the program\n\n"
+        << "1. Submit a Transaction\n"
+        << "2. List all Accounts\n"
+        << "3. Print a Monthly Statement\n"
+        << "4. Print Savings Value\n"
+        << "5. Print Checking Value\n"
+        << "6. Print CD Value\n"
+        << "7. List all Customers\n"
+        << "8. Save\n"
+        << "9. Exit\n" << endl;
+}
+
+//Prints the header showing current customer.
+void BankManager::printHeader(){
+    if (currentCustomer != NULL){
+        out << "------------------------------------\n"
+            << "Current Customer: " << currentCustomer << "\n"
+            << "------------------------------------\n" << endl;
+    }
+}
+
+
+
 //TODO add a new customer.
 void BankManager::addCustomer(){
     Customer customer = Customer();
@@ -189,37 +199,41 @@ void BankManager::listAccounts(){
 //Lists all saved customers.
 //TODO and the value of their accounts.
 void BankManager::listCustomers(){
-    if (!customers.empty()){
-        for (unsigned i = 0; i < customers.size(); i++){
-            Customer customer = customers.at(i);
-            out << customer.getFirstName() << " " << customer.getLastName()
-                << "\nID: " << customer.getID()
-                << "\nSSN: " << customer.getSSN()
-                << "\nAddress: " << customer.getAddress()
-                << "\n\n";
+	if (!customers.empty()){
+		for (unsigned i = 0; i < customers.size(); i++){
+			Customer customer = customers.at(i);
+			out << customer.getFirstName() << " " << customer.getLastName()
+				<< "\nID: " << customer.getID()
+				<< "\nSSN: " << customer.getSSN()
+				<< "\nAddress: " << customer.getAddress();			
+			customer.printAccount(out);		
+            out << "\n\n";
         }
     }
 }
 
 //TODO print a statement for an account to be selected.
 void BankManager::printStatement(){
-    int accountNumber;
     out << "Enter an account number to print: ";
-    in >> accountNumber;
-
-    if (!accounts.empty()){
-        for (unsigned i = 0; i < accounts.size(); i++){
-        //do output
-        //if (accounts.at(i).getID() == accountNumber){
-        //	accounts.at(i).printStatement();
-        //}
-        }
-    }	
+	handleInput();
+	while (currentState == 3){
+		if (!accounts.empty()){
+			for (unsigned i = 0; i < accounts.size(); i++){
+				//do output
+				if (accounts.at(i).getID() == currentAccount){
+					accounts.at(i).generateReport(out);
+					return;
+				}
+			}
+		}
+		out << "enter a valid input: ";
+		handleInput();
+	}
 }
 
 //Template saves to a file.
 template<typename T>
-void saveFile(vector<T>& vec, ofstream& outFile){
+void saveFile(vector<T> vec, ofstream& outFile){
     if (!vec.empty()){
         for (unsigned i = 0; i < vec.size(); i++){
 			vec.at(i).save(outFile);
@@ -247,7 +261,7 @@ void BankManager::save(){
 
 //Template loads from a file.
 template<typename T>
-void loadFile(vector<T>& vec, ifstream& inFile){
+void loadFile(vector<T> vec, ifstream& inFile){
     T temp = T();
     while (!inFile.eof()){
         inFile >> temp;

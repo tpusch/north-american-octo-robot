@@ -1,5 +1,7 @@
 #include "Customer.h"
 
+#include <sstream>
+
 using namespace std;
 using std::istream;
 using std::ostream;
@@ -12,6 +14,18 @@ Customer::Customer()
 
 Customer::~Customer()
 {
+}
+
+void Customer::addAccount(int accountNum){
+	
+}
+
+void Customer::printAccount(ostream& os){
+	if (!accountNums.empty()){
+		for (unsigned i = 0; i < accountNums.size(); i++){
+			os << "\nAccount: " << accountNums.at(i);
+		}
+	}
 }
 
 void Customer::listAccounts(){
@@ -27,23 +41,31 @@ ostream& operator<< (ostream& os, const Customer& customer){
 }
 
 istream& operator>> (istream& is, Customer& customer){
+	string line;
 	string input;
-	is >> customer.firstName >> customer.lastName >> customer.customerID >> customer.ssn;
-	cerr << customer.firstName << customer.lastName << customer.customerID << customer.ssn;
-	is >> input;
-	while (input != "end"){
-		cerr << input << endl;
-		if (input == "accountID:"){
+
+	getline(is, line);
+	istringstream row(line);
+
+	row >> customer.firstName >> customer.lastName >> customer.customerID >> customer.ssn;
+	customer.accountNums.clear();
+	while (row>>input){
+		if (input == "account:"){
 			//TODO this
-			cout << "got an acct" << endl;
+			int accountNum;
+			row >> accountNum;
+			customer.addAccount(accountNum);
+			customer.accountNums.push_back(accountNum);
 		}
 		if (input == "address:"){
-			is >> customer.address;
+			//row >> customer.address;
+			getline(row, customer.address);
+
 		}
-		is >> input;
 	}
 	return is;
 }
+
 
 void Customer::save(ostream& output){
 	output << firstName << " " << lastName << " " << customerID << " " << ssn << " " << address; 

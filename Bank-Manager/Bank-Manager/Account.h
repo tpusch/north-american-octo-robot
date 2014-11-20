@@ -27,6 +27,7 @@ public:
     vector<Customer*> getCustomers(){ return customers; }
     double getBalance(){ return balance; }
     void updateBalance(double rate){ balance += balance * rate; }
+	int getID(){ return accountID; }
 
 private:
     double balance;
