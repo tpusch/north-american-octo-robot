@@ -284,3 +284,35 @@ void BankManager::load(){
     customerFile.close();
     transactionFile.close();
 }
+
+void BankManager::getDate(){
+	time_t t = time(0);
+	struct tm * now = localtime(&t);
+	currentDate.setDate((now->tm_mon + 1), (now->tm_mday), (now->tm_year + 1900));
+}
+
+void BankManager::compoundAccounts(){
+	int count;
+	for (unsigned i = 0; i < accounts.size(); i++)
+	{
+		count = monthsPast(accounts.at(i));
+		accounts.at(i).monthlyChores(count);
+	}
+}
+
+int BankManager::monthsPast(Account& account){
+	if (currentDate < account.getDate())
+	{
+		return 0;
+	}
+	int years = currentDate.getYear() - account.getDate().getYear();
+	int months = currentDate.getMonth() - account.getDate().getMonth();
+	int days = currentDate.getDay() - account.getDate().getDay();
+	int totalMonths = years * 12;
+	totalMonths += months;
+	if (days <= 0)
+	{
+		totalMonths--;
+	}
+	return totalMonths;
+}

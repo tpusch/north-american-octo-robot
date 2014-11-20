@@ -5,13 +5,13 @@
 class Checking : public Account
 {
 public:
-    //constructor/destructor
-    Checking();
-    
-    //prototypes
-    void checkOverdraft(const Transaction&);
-    
+	//constructor/destructor
+	Checking(){};
+
+	//prototypes
+	void monthlyChores(int);
+
 private:
-    double monthlyFee;
+	double monthlyFee;
 };
 

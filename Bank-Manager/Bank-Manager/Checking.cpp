@@ -2,14 +2,26 @@
 
 using namespace std;
 
-Checking::Checking()
+void Checking::monthlyChores(int numMonths)
 {
-}
-
-void Checking::checkOverdraft(const Transaction& tran)
-{
-    if (tran.getAmount() > getBalance())
-    {
-        updateBalance(25);
-    }
+	int theMonth = dateOpened.getMonth() + 1;
+	int theYear = dateOpened.getYear();
+	int theDay = dateOpened.getDay();
+	for (int i = 0; i < numMonths; i++)
+	{
+		Transaction action;
+		action.setAccountID(accountID);
+		action.setAmount(20);
+		action.setLocation("bank");
+		action.setType('f');
+		if (theMonth == 13)
+		{
+			theMonth = 1;
+			theYear++;
+		}
+		Date date;
+		date.setDate(theMonth, theDay, theYear);
+		action.setDate(date);
+		transactions.push_back(action);
+	}
 }

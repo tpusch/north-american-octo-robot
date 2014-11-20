@@ -36,6 +36,9 @@ private:
 	void printStatement();
 	void save();
 	void load();
+	void getDate();
+	void compoundAccounts();
+	int monthsPast(Account&);
 
 	bool inMenu;
 	bool running;
@@ -53,4 +56,6 @@ private:
 	vector<Customer> customers;
 	vector<Account> accounts;
 	vector<Transaction> transactions;
+
+	Date currentDate;
 };
