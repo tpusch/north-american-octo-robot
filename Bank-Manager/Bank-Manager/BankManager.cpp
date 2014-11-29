@@ -26,6 +26,7 @@ BankManager::~BankManager()
 }
 
 void BankManager::run(){
+	out << "preload";
 	load();
 	out << "<<O>><<O>> WELCOME TO ALL POWERFUL BANK, MAKE A SELECTION <<O>><<O>>\n"
 		<< "   ----                                                      ----   \n" << endl;
@@ -210,7 +211,7 @@ void saveFile(vector<T>& vec, ofstream& outFile){
 	if (!vec.empty()){
 		for (unsigned i = 0; i < vec.size(); i++){
 			outFile << vec.at(i);
-			outFile << "\n";
+			if (i+1 != vec.size()){ outFile << "\n"; }
 		}
 	}
 }
@@ -219,11 +220,11 @@ void BankManager::save(){
 	ofstream accountFile, customerFile, transactionFile;
 	accountFile.open("Accounts.txt", ios::out);
 	customerFile.open("Customers.txt", ios::out);
-	transactionFile.open("Transactions.txt", ios::out);
+	transactionFile.open("Transactionsout.txt", ios::out);
 	
 	//saveFile(accounts, accountFile);
 	saveFile(customers, customerFile);
-	//saveFile(transactions, transactionFile);
+	saveFile(transactions, transactionFile);
 
 	accountFile.close();
 	customerFile.close();
@@ -231,9 +232,9 @@ void BankManager::save(){
 }
 
 template<typename T>
-void loadFile(vector<T>& vec, ifstream& inFile){
-	T temp = T();
+void loadFile(vector<T>& vec, ifstream& inFile){	
 	while (!inFile.eof()){
+		T temp = T();
 		inFile >> temp;
 		vec.push_back(temp);
 	}
@@ -244,9 +245,10 @@ void BankManager::load(){
 	accountFile.open("Accounts.txt", ios::in);
 	customerFile.open("Customers.txt", ios::in);
 	transactionFile.open("Transactions.txt", ios::in);
+	
 	//loadFile(accounts, accountFile);
 	loadFile(customers, customerFile);
-	//loadFile(transactions, transactionFile);
+	loadFile(transactions, transactionFile);
 
 	accountFile.close();
 	customerFile.close();

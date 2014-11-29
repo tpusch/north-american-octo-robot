@@ -16,7 +16,6 @@ class Customer
 	
 public:
 	Customer();
-	Customer(string);
 	~Customer();
 
 	int getID(){ return customerID; }

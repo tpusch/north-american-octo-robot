@@ -9,11 +9,6 @@ Customer::Customer()
 {
 }
 
-Customer::Customer(string line)
-{
-}
-
-
 Customer::~Customer()
 {
 }

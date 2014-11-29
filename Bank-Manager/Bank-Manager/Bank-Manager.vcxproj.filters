@@ -85,5 +85,14 @@
     <Text Include="Transactions.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Transactionsout.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Customersout.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Accountsout.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
