@@ -19,6 +19,7 @@ public:
 
 	void run();
 
+	
 private:
 	void menuInput(std::string);
 	void update();
@@ -35,6 +36,9 @@ private:
 	void printStatement();
 	void save();
 	void load();
+	void getDate();
+	void compoundAccounts();
+	int monthsPast(Account&);
 
 	bool inMenu;
 	bool running;
@@ -47,8 +51,11 @@ private:
 	std::ostream& out;
 
 	Customer* currentCustomer;
-
+	int currentAccount;
+	
 	vector<Customer> customers;
 	vector<Account> accounts;
 	vector<Transaction> transactions;
+
+	Date currentDate;
 };

@@ -1,10 +1,16 @@
 #pragma once
 #include "Account.h"
-class Savings :
-	public Account
+
+class Savings : public Account
 {
 public:
-	Savings();
-	~Savings();
+	//constructor
+	Savings(){};
+
+	//prototypes
+	virtual void monthlyChores(int);
+
+private:
+	double interestRate;
 };
 

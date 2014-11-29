@@ -35,4 +35,4 @@ test:			    all
 			    ./main < testCaseMDW.input
 
 clean:	
-			    rm -f *.o core *.exe cbook
+			    rm -f *.o core *.exe main

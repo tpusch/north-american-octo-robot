@@ -14,7 +14,8 @@ public:
     friend istream& operator>>(istream&, Date&);
     friend ostream& operator<<(ostream&, const Date&);
     bool operator<(const Date&) const;
-    bool operator==(const Date&) const;
+	bool operator==(const Date&) const;
+	void setDate(int, int, int);
     
     //simple one line accessors
     int getMonth() { return month; }

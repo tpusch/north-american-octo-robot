@@ -1,10 +1,17 @@
 #pragma once
 #include "Account.h"
-class Certificate_of_Deposit :
-	public Account
+
+class Certificate_of_Deposit : public Account
 {
 public:
-	Certificate_of_Deposit();
-	~Certificate_of_Deposit();
+	//constructor
+	Certificate_of_Deposit(){};
+
+	//prototypes
+	virtual void monthlyChores(int);
+
+private:
+	double interestRate;
+	Date maturityDate;
 };
 

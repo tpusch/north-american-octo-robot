@@ -4,62 +4,60 @@
 #include <list>
 #include <string>
 #include <vector>
+//#include "Account.h"
 
 class Account;
 
+using namespace std;
 using std::list;
 using std::string;
 using std::vector;
+
 
 class Customer
 {
 	
 public:
-	Customer();
-	~Customer();
+    //constructor/destructor
+    Customer();
+    ~Customer();
 
+    void listAccounts();
+	void printAccount(ostream&);
+	void addAccount(int);
+	void save(ostream&);
+
+    //returns a pointer to a list of account pointers
+    //vector<Account*> getAccounts(){ return accountsPtr; }
+
+    //overloaded operators
+    friend std::ostream& operator<< (std::ostream&, const Customer&);
+    friend std::istream& operator>> (std::istream&, Customer&);
+
+	//Simple getters
 	int getID(){ return customerID; }
-	void setID(const int);
-
 	string getFirstName(){ return firstName; }
-	void setFirstName(const string&);
-
 	string getLastName(){ return lastName; }
-	void setLastName(const string&);
-
 	string getAddress(){ return address; }
-	void setAddress(const string&);
-
 	string getSSN(){ return ssn; }
-	void setSSN(const string&);
 
-	void listAccounts();
 	
-	void printCheckingValue();
-	void printSavingsValue();
-	void printCDValue();
-
-	//returns a pointer to a list of account pointers
-//	list<Account*>* getAccounts(){ return accountsPtr; }
-
-	//TODO: overload >> and <<
-	friend std::ostream& operator<< (std::ostream&, const Customer&);
-	friend std::istream& operator>> (std::istream&, Customer&);
-
 
 protected:
-	int customerID;
 
-	string firstName;
-	string lastName;
+    int customerID;
 
-	string address;
-	string ssn;
+    string firstName;
+    string lastName;
 
-	//A list of pointers, pointing to accounts
-//	vector<Account> accounts;
-	//A pointer pointing to a list of account pointers
-	//This is a single pointer
-//	vector<Account> accountsPtr;
+    string address;
+    string ssn;
+
+	vector<int> accountNums;
+    //A list of pointers, pointing to accounts
+    vector<Account*> myAccounts;
+    //A pointer pointing to a list of account pointers
+    //This is a single pointer
+    vector<Account>* accountsPtr;
 };
 

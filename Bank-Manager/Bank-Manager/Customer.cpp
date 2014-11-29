@@ -1,5 +1,8 @@
 #include "Customer.h"
 
+#include <sstream>
+
+using namespace std;
 using std::istream;
 using std::ostream;
 using std::ifstream;
@@ -13,18 +16,23 @@ Customer::~Customer()
 {
 }
 
+void Customer::addAccount(int accountNum){
+	
+}
+
+void Customer::printAccount(ostream& os){
+	if (!accountNums.empty()){
+		for (unsigned i = 0; i < accountNums.size(); i++){
+			os << "\nAccount: " << accountNums.at(i);
+		}
+	}
+}
+
 void Customer::listAccounts(){
-
-};
-
-void Customer::printCheckingValue(){
-
-};
-void Customer::printSavingsValue(){
-
-};
-void Customer::printCDValue(){
-
+//    for (unsigned i = 0; i < accountsPtr.size(); i++)
+//    {
+//        cout << getAccounts()[i];
+//    }
 };
 
 ostream& operator<< (ostream& os, const Customer& customer){
@@ -33,6 +41,32 @@ ostream& operator<< (ostream& os, const Customer& customer){
 }
 
 istream& operator>> (istream& is, Customer& customer){
-	is >> customer.firstName >> customer.lastName >> customer.customerID >> customer.ssn >> customer.address;
+	string line;
+	string input;
+
+	getline(is, line);
+	istringstream row(line);
+
+	row >> customer.firstName >> customer.lastName >> customer.customerID >> customer.ssn;
+	customer.accountNums.clear();
+	while (row>>input){
+		if (input == "account:"){
+			//TODO this
+			int accountNum;
+			row >> accountNum;
+			customer.addAccount(accountNum);
+			customer.accountNums.push_back(accountNum);
+		}
+		if (input == "address:"){
+			//row >> customer.address;
+			getline(row, customer.address);
+
+		}
+	}
 	return is;
+}
+
+
+void Customer::save(ostream& output){
+	output << firstName << " " << lastName << " " << customerID << " " << ssn << " " << address; 
 }
