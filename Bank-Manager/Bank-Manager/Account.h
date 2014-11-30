@@ -18,23 +18,28 @@ public:
 
 	//prototypes
 	friend istream& operator>>(istream&, Account&);
+        friend ostream& operator<<(ostream&, const Account&);
 	void addTransaction(Transaction);
 	void sortTransactions();
 	void generateReport(ostream&);
+        void generateMonthlyReport(ostream&, int, int);
 	void save(ostream&);
-	virtual void monthlyChores(int){};
-
+        double getValue();
+        double updateBalance(Transaction&, double);
+        
+        //virtual methods
+        virtual void monthlyChores(int){};
+        
 	//simple one line accessors
 	vector<Transaction> getTransactions(){ return transactions; }
 	vector<Customer*> getCustomers(){ return customers; }
-	double getBalance(){ return balance; }
-	void updateBalance(double rate){ balance += balance * rate; }
 	Date getDate(){	return dateOpened;}
 	int getID(){ return accountID; }
+        string getType(){ return type; }
 
 protected:
 	double balance;
-	int accountID;
+	double accountID;
 	Date dateOpened;
 	string type;
 	vector<Transaction> transactions;
