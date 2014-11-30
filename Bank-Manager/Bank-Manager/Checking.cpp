@@ -2,9 +2,18 @@
 
 using namespace std;
 
+void Checking::operator =(Account& account)
+{
+    balance = account.getBalance();
+    accountID = account.getID();
+    dateOpened = account.getDate();
+    type = account.getType();
+}
+
 void Checking::monthlyChores(int numMonths)
 {
-	int theMonth = dateOpened.getMonth() + 1;
+    cerr << "in mc" << endl;
+    int theMonth = dateOpened.getMonth() + 1;
 	int theYear = dateOpened.getYear();
 	int theDay = dateOpened.getDay();
 	for (int i = 0; i < numMonths; i++)
@@ -23,5 +32,6 @@ void Checking::monthlyChores(int numMonths)
 		date.setDate(theMonth, theDay, theYear);
 		action.setDate(date);
 		transactions.push_back(action);
+                cerr << action;
 	}
 }

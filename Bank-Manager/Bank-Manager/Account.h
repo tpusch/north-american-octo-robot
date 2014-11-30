@@ -28,7 +28,7 @@ public:
         double updateBalance(Transaction&, double);
         
         //virtual methods
-        virtual void monthlyChores(int){};
+        virtual void monthlyChores(int){cerr << "this one" << endl;};
         
 	//simple one line accessors
 	vector<Transaction> getTransactions(){ return transactions; }
@@ -36,10 +36,11 @@ public:
 	Date getDate(){	return dateOpened;}
 	int getID(){ return accountID; }
         string getType(){ return type; }
+        double getBalance(){ return balance; }
 
 protected:
 	double balance;
-	double accountID;
+	int accountID;
 	Date dateOpened;
 	string type;
 	vector<Transaction> transactions;

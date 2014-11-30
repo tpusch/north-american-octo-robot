@@ -1,5 +1,14 @@
 #include "Transaction.h"
 
+Transaction::Transaction(int id, char t, double a, string loc, Date date)
+{
+    accountID = id;
+    type = t;
+    amount = a;
+    location = loc;
+    time = date;
+}
+
 //overload extraction operator
 istream& operator>>(istream& input, Transaction& transaction)
 {

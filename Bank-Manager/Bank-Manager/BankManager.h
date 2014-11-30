@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Account.h"
+#include "Checking.h"
 #include "Customer.h"
 #include "Transaction.h"
 
@@ -32,13 +33,21 @@ private:
 
 	void addCustomer();
 
-	void listAccounts(double);
+	void listAccounts();
 	void listCustomers();
 	void printStatement();
 	void save();
 	void load();
+        
+        void setup();
+        
 	void getDate();
 	void compoundAccounts();
+        
+        void printAccountValue(string);
+        
+        void submitTransaction();
+        
 	int monthsPast(Account&);
 
 	bool inMenu;

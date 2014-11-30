@@ -33,12 +33,12 @@ void Customer::printAccount(ostream& os){
 	}
 }
 
-void Customer::listAccounts(){
+//void Customer::listAccounts(){
 //    for (unsigned i = 0; i < accountsPtr.size(); i++)
 //    {
-//        cout << getAccounts()[i];
+//        cout << [i];
 //    }
-};
+//}
 
 ostream& operator<< (ostream& os, const Customer& customer){
 	os << customer.firstName << " " << customer.lastName << " " << customer.customerID << " " << customer.ssn << " " << customer.address;

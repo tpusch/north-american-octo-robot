@@ -11,6 +11,7 @@ class Transaction {
 public:
 	//constructors/destructor
 	Transaction() {};
+        Transaction(int,char,double,string,Date);
 	virtual ~Transaction(){}
 
 	//prototypes
@@ -24,6 +25,7 @@ public:
 	char getType() const { return type; }
 	string getLocation() const { return location; }
 	double getAmount() const { return amount; }
+        int getAccountID() const { return accountID; }
 
 	//simple one line modifiers
 	void setDate(const Date& t){ time = t; }

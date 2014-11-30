@@ -2,6 +2,7 @@
 #include <sstream>
 #include <iomanip>
 #include <limits>
+#include <memory>
 
 #include "BankManager.h"
 
@@ -10,6 +11,8 @@ using std::ostream;
 
 using std::endl;
 using std::string;
+
+using namespace std;
 
 //Creates a new bank manager given an input stream and an output stream.
 BankManager::BankManager(istream& inStream, ostream& outStream)
@@ -26,18 +29,26 @@ BankManager::~BankManager()
 {
 }
 
+
+
+
 //Runs the program until state changes to exit.
 void BankManager::run(){
     load();
+    setup();
     out << "<<O>><<O>> WELCOME TO ALL POWERFUL BANK, MAKE A SELECTION <<O>><<O>>\n"
         << "   ----                                                      ----   \n" << endl;
-    //printMenu();
+    printMenu();
     while (running){
-		update();
+		//update();
 		handleInput();
-        //update();
+        update();
     }
 }
+
+
+
+
 
 //Updates the screen based on the current program state.
 void BankManager::update(){
@@ -48,11 +59,11 @@ void BankManager::update(){
         break;
     case 1: //Submit a transaction
         out << "1. Submit a transaction\n";
+        submitTransaction();
         break;
     case 2: //List all accounts for a given customer
         out << "2. List all accounts\n";
-        out << "Enter a Customer ID: ";
-//        listAccounts(in);
+        listAccounts();
         break;
     case 3: //Print a Monthly statement for a specific account
         out << "3. Print a Monthly Statement\n";
@@ -60,15 +71,15 @@ void BankManager::update(){
         break;
     case 4: //Print the total savings value
         out << "4. Print Savings Value\n";
-		//TODO 
+        printAccountValue("s");
         break;
     case 5: //Print the total Checking value
         out << "5. Print Checking Value\n";
-		//TODO
+        printAccountValue("c");
         break;
     case 6: //Print the total CD value
         out << "6. Print CD Value\n";
-		//TODO 
+        printAccountValue("cd");
         break;
     case 7: //List all customers 
 			//TODO and the total value of all their accounts
@@ -120,13 +131,9 @@ void BankManager::handleInput(){
 		menuInput(choice);
 	}
 
-	if (currentState == 3){
-		currentAccount = stoi(choice);
-	}
+	
 
-	if (currentState == 2){
-            listAccounts(in);
-        }
+	
 }
 
 //Changes the state based on the users choice.
@@ -198,17 +205,23 @@ void BankManager::addCustomer(){
 }
 
 //TODO list all accounts for the current customer.
-void BankManager::listAccounts(double id){
-    for (unsigned i = 0; i < accounts.size(); i++)
+void BankManager::listAccounts(){
+    int id;
+        out << "Enter a Customer ID: ";
+        in >> id;
+    for (unsigned i = 0; i < customers.size(); i++)
     {
-        for (unsigned j = 0; j < accounts.at(i).getCustomers().size(); j++)
-        {
-            if (accounts.at(i).getCustomers().at(j)->getID() == id)
-            {
-                out << accounts.at(i);
-                break;
-            }
+        if(customers.at(i).getID() == id){
+            customers.at(i).printAccount(out);
         }
+//        for (unsigned j = 0; j < customers.at(i).; j++)
+//        {
+//            if (accounts.at(i).getCustomers().at(j)->getID() == id)
+//            {
+//                out << accounts.at(i);
+//                break;
+//            }
+//        }
     }
 }
 
@@ -230,21 +243,22 @@ void BankManager::listCustomers(){
 
 //TODO print a statement for an account to be selected.
 void BankManager::printStatement(){
+    int id;
     out << "Enter an account number to print: ";
-	handleInput();
-	while (currentState == 3){
-		if (!accounts.empty()){
+    in >> id;
+    if (!accounts.empty()){
 			for (unsigned i = 0; i < accounts.size(); i++){
 				//do output
-				if (accounts.at(i).getID() == currentAccount){
-					accounts.at(i).generateReport(out);
+				if (accounts.at(i).getID() == id){
+                                    out << "\nEnter a month and a year: ";
+                                    int m, y;
+                                    in >> m >> y;
+					accounts.at(i).generateMonthlyReport(out,m,y);
 					return;
 				}
 			}
 		}
-		out << "enter a valid input: ";
-		handleInput();
-	}
+	
 }
 
 //Template saves to a file.
@@ -253,7 +267,9 @@ void saveFile(vector<T> vec, ofstream& outFile){
     if (!vec.empty()){
         for (unsigned i = 0; i < vec.size(); i++){
 			vec.at(i).save(outFile);
-			outFile << "\n";
+			if(i < (vec.size()-1)){
+                            outFile << "\n";
+                        }
         }
     }
 }
@@ -262,13 +278,13 @@ void saveFile(vector<T> vec, ofstream& outFile){
 void BankManager::save(){
     ofstream accountFile, customerFile, transactionFile;
     
-    accountFile.open("Accounts.txt", ios::out);
-    customerFile.open("Customers.txt", ios::out);
-    transactionFile.open("Transactions.txt", ios::out);
+    accountFile.open("Accountsout.txt", ios::out);
+    customerFile.open("Customersout.txt", ios::out);
+    transactionFile.open("Transactionsout.txt", ios::out);
 	
-    //saveFile(accounts, accountFile);
+    saveFile(accounts, accountFile);
     saveFile(customers, customerFile);
-    //saveFile(transactions, transactionFile);
+    saveFile(transactions, transactionFile);
 
     accountFile.close();
     customerFile.close();
@@ -277,13 +293,31 @@ void BankManager::save(){
 
 //Template loads from a file.
 template<typename T>
-void loadFile(vector<T> vec, ifstream& inFile){
+void loadFile(vector<T>& vec, ifstream& inFile){
     T temp = T();
     while (!inFile.eof()){
         inFile >> temp;
         vec.push_back(temp);
     }
 }
+
+void loadAccounts(vector<Account>& vec, ifstream& inFile){
+    Account temp = Account();
+    while (!inFile.eof()){
+        inFile >> temp;
+        if(temp.getType() == "c"){
+            Checking cTemp = Checking();
+            cTemp = temp;
+            vec.push_back(cTemp);
+        }
+        else{
+            vec.push_back(temp);
+        }
+    }
+    
+    
+}
+
 
 //Opens all files and fills accounts, transactions, and customers based on contents.
 void BankManager::load(){
@@ -292,9 +326,9 @@ void BankManager::load(){
     customerFile.open("Customers.txt", ios::in);
     transactionFile.open("Transactions.txt", ios::in);
     
-        //loadFile(accounts, accountFile);
+    loadAccounts(accounts, accountFile);
     loadFile(customers, customerFile);
-    //loadFile(transactions, transactionFile);
+    loadFile(transactions, transactionFile);
 
     accountFile.close();
     customerFile.close();
@@ -312,7 +346,8 @@ void BankManager::compoundAccounts(){
 	for (unsigned i = 0; i < accounts.size(); i++)
 	{
 		count = monthsPast(accounts.at(i));
-		accounts.at(i).monthlyChores(count);
+                
+                accounts.at(i).monthlyChores(count);
 	}
 }
 
@@ -331,4 +366,45 @@ int BankManager::monthsPast(Account& account){
 		totalMonths--;
 	}
 	return totalMonths;
+}
+
+void BankManager::setup(){
+    getDate();
+    for (unsigned i = 0; i < transactions.size(); i++){
+        for (unsigned j = 0; j < accounts.size(); j++){
+            if (transactions.at(i).getAccountID() == accounts.at(j).getID()){
+                accounts.at(j).addTransaction(transactions.at(i));
+            }
+        }
+    }
+    //compoundAccounts();
+}
+
+void BankManager::printAccountValue(string type){
+    double totalBalance;
+    for(unsigned i = 0; i < accounts.size(); i++ ){
+        if(accounts.at(i).getType() == type){
+            totalBalance += accounts.at(i).getValue();
+        }
+    }
+    out << "Total balance of " << type << " accounts is: " << totalBalance << endl;
+    
+}
+
+void BankManager::submitTransaction(){
+    int i; double a; char type; string location; Date d;   
+    out << "Account number: ";
+    in >> i;
+    out << "Type: ";
+    in >> type;
+    out << "Amount: ";
+    in >> a;
+    out << "Location: ";
+    in >> location;
+    out << "Date: ";
+    in >> d;
+    Transaction trans = Transaction(i,type,a,location,d);
+    transactions.push_back(trans);
+    setup();
+    currentState = 0;
 }
