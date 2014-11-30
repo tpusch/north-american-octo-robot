@@ -21,10 +21,15 @@ void Customer::addAccount(int accountNum){
 }
 
 void Customer::printAccount(ostream& os){
+	os << "\nCustomer: " << firstName << " " << lastName;
 	if (!accountNums.empty()){
 		for (unsigned i = 0; i < accountNums.size(); i++){
-			os << "\nAccount: " << accountNums.at(i);
+			
+			os << "\nAccount ID: " << accountNums.at(i);
 		}
+	}
+	else{
+		os << "\nCustomer has no accounts";
 	}
 }
 

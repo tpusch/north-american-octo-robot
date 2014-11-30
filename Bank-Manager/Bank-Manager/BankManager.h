@@ -28,6 +28,7 @@ private:
 	void printHeader();
 
 	void handleInput();
+	void resetMenu();
 
 	void addCustomer();
 
@@ -58,4 +59,6 @@ private:
 	vector<Transaction> transactions;
 
 	Date currentDate;
+
+	string temp;
 };

@@ -31,11 +31,10 @@ void BankManager::run(){
     load();
     out << "<<O>><<O>> WELCOME TO ALL POWERFUL BANK, MAKE A SELECTION <<O>><<O>>\n"
         << "   ----                                                      ----   \n" << endl;
-    //printMenu();
+    printMenu();
     while (running){
-		update();
 		handleInput();
-        //update();
+        update();
     }
 }
 
@@ -75,8 +74,9 @@ void BankManager::update(){
         listCustomers();
         break;
     case 8: //Save accounts, transactions, and customers
-        out << "8. Save\n";
+        out << "8. Saved\n";
         save();
+		currentState = 0;
         break;
     case 9: //Exit the program
         running = false;
@@ -183,7 +183,14 @@ void BankManager::printHeader(){
     }
 }
 
-
+void BankManager::resetMenu(){
+	currentState = 0;
+	out << "\nPress enter to return to menu.\n";
+	//in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	in.clear();
+	in.get();
+	printMenu();
+}
 
 //TODO add a new customer.
 void BankManager::addCustomer(){
@@ -193,7 +200,27 @@ void BankManager::addCustomer(){
 
 //TODO list all accounts for the current customer.
 void BankManager::listAccounts(){
-    
+	int customerID;
+	bool customerFound = false;
+	out << "Enter a customer id: ";
+	in >> customerID;
+	for (int i = 0; i < customers.size(); i++)
+	{
+		if (customers.at(i).getID() == customerID){
+			customers.at(i).printAccount(out);
+			customerFound = true;
+		}
+	}
+
+	if (!customerFound){
+		out << "Customer not found" << endl;
+		currentState = 0;
+		printMenu();
+	}
+	else{
+		out << endl;
+	}
+	resetMenu();
 }
 
 //Lists all saved customers.
@@ -210,25 +237,28 @@ void BankManager::listCustomers(){
             out << "\n\n";
         }
     }
+	resetMenu();
 }
 
 //TODO print a statement for an account to be selected.
 void BankManager::printStatement(){
-    out << "Enter an account number to print: ";
-	handleInput();
-	while (currentState == 3){
-		if (!accounts.empty()){
-			for (unsigned i = 0; i < accounts.size(); i++){
-				//do output
-				if (accounts.at(i).getID() == currentAccount){
-					accounts.at(i).generateReport(out);
-					return;
-				}
+	int accountID;
+	bool accountFound = false;
+	out << "Enter an account number to print: ";
+	in >> accountID;
+	if (!accounts.empty()){
+		for (unsigned i = 0; i < accounts.size(); i++){
+			//do output
+			if (accounts.at(i).getID() == accountID){
+				accounts.at(i).generateReport(out);
+				accountFound = true;
 			}
 		}
-		out << "enter a valid input: ";
-		handleInput();
 	}
+	if (!accountFound){
+		out << "Account not Found";
+	}
+	resetMenu();
 }
 
 //Template saves to a file.
@@ -237,7 +267,9 @@ void saveFile(vector<T> vec, ofstream& outFile){
     if (!vec.empty()){
         for (unsigned i = 0; i < vec.size(); i++){
 			vec.at(i).save(outFile);
-			outFile << "\n";
+			if (i != (vec.size() - 1)){
+				outFile << "\n";
+			}
         }
     }
 }
@@ -246,13 +278,13 @@ void saveFile(vector<T> vec, ofstream& outFile){
 void BankManager::save(){
     ofstream accountFile, customerFile, transactionFile;
     
-	accountFile.open("Accounts.txt", ios::out);
-    customerFile.open("Customers.txt", ios::out);
-    transactionFile.open("Transactions.txt", ios::out);
+	accountFile.open("Accountsout.txt", ios::out);
+    customerFile.open("Customersout.txt", ios::out);
+    transactionFile.open("Transactionsout.txt", ios::out);
 	
-    //saveFile(accounts, accountFile);
+    saveFile(accounts, accountFile);
     saveFile(customers, customerFile);
-    //saveFile(transactions, transactionFile);
+    saveFile(transactions, transactionFile);
 
     accountFile.close();
     customerFile.close();
@@ -261,7 +293,7 @@ void BankManager::save(){
 
 //Template loads from a file.
 template<typename T>
-void loadFile(vector<T> vec, ifstream& inFile){
+void loadFile(vector<T>& vec, ifstream& inFile){
     T temp = T();
     while (!inFile.eof()){
         inFile >> temp;
@@ -276,9 +308,9 @@ void BankManager::load(){
     customerFile.open("Customers.txt", ios::in);
     transactionFile.open("Transactions.txt", ios::in);
     
-	//loadFile(accounts, accountFile);
+	loadFile(accounts, accountFile);
     loadFile(customers, customerFile);
-    //loadFile(transactions, transactionFile);
+    loadFile(transactions, transactionFile);
 
     accountFile.close();
     customerFile.close();

@@ -1,8 +1,8 @@
-John Doe 1 123-46-1789 123-North-Street
-Jane Doe 2 123-46-1789 123-North-Street
-Steve Doe 3 123-46-1789 123-North-Street
-Alex Doe 4 123-46-1789 123-North-Street
-Bergal Doe 5 123-46-1789 123-North-Street
-Remus Doe 6 123-46-1789 123-North-Street
-FLoyed Doe 7 123-46-1789 123-North-Street
-Mike Doe 8 123-46-1789 123-North-Street
+John Doe 1 123-46-1789  123 North Street
+Jane Doe 2 123-46-1789  123 North Street
+Steve Doe 3 123-46-1789  123 North Street
+Alex Doe 4 123-46-1789  123 North Street
+Bergal Doe 5 123-46-1789  123 North Street
+Remus Doe 6 123-46-1789  123 North Street
+FLoyed Doe 7 123-46-1789  123 North Street
+Mike Doe 8 123-46-1789  123 North Street
