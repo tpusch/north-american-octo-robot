@@ -31,16 +31,17 @@ void BankManager::run(){
     load();
     out << "<<O>><<O>> WELCOME TO ALL POWERFUL BANK, MAKE A SELECTION <<O>><<O>>\n"
         << "   ----                                                      ----   \n" << endl;
-    printMenu();
+    //printMenu();
     while (running){
+		update();
 		handleInput();
-        update();
+        //update();
     }
 }
 
 //Updates the screen based on the current program state.
 void BankManager::update(){
-	switch (currentState){
+    switch (currentState){
     case 0: //Menu
         printHeader();
         printMenu();
@@ -50,7 +51,8 @@ void BankManager::update(){
         break;
     case 2: //List all accounts for a given customer
         out << "2. List all accounts\n";
-        listAccounts();
+        out << "Enter a Customer ID: ";
+//        listAccounts(in);
         break;
     case 3: //Print a Monthly statement for a specific account
         out << "3. Print a Monthly Statement\n";
@@ -74,9 +76,8 @@ void BankManager::update(){
         listCustomers();
         break;
     case 8: //Save accounts, transactions, and customers
-        out << "8. Saved\n";
+        out << "8. Save\n";
         save();
-		currentState = 0;
         break;
     case 9: //Exit the program
         running = false;
@@ -95,6 +96,11 @@ void BankManager::update(){
 //Handles keyboard input based on state
 void BankManager::handleInput(){
 	in >> choice;
+        //allows ctrl+d quit
+        if (!in.good())
+        {
+            choice = "quit";
+        }
 	if (!in){
 		currentState = 10;
 		in.clear();
@@ -118,7 +124,9 @@ void BankManager::handleInput(){
 		currentAccount = stoi(choice);
 	}
 
-	
+	if (currentState == 2){
+            listAccounts(in);
+        }
 }
 
 //Changes the state based on the users choice.
@@ -183,15 +191,6 @@ void BankManager::printHeader(){
     }
 }
 
-void BankManager::resetMenu(){
-	currentState = 0;
-	out << "\nPress enter to return to menu.\n";
-	//in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-	in.clear();
-	in.get();
-	printMenu();
-}
-
 //TODO add a new customer.
 void BankManager::addCustomer(){
     Customer customer = Customer();
@@ -199,28 +198,18 @@ void BankManager::addCustomer(){
 }
 
 //TODO list all accounts for the current customer.
-void BankManager::listAccounts(){
-	int customerID;
-	bool customerFound = false;
-	out << "Enter a customer id: ";
-	in >> customerID;
-	for (int i = 0; i < customers.size(); i++)
-	{
-		if (customers.at(i).getID() == customerID){
-			customers.at(i).printAccount(out);
-			customerFound = true;
-		}
-	}
-
-	if (!customerFound){
-		out << "Customer not found" << endl;
-		currentState = 0;
-		printMenu();
-	}
-	else{
-		out << endl;
-	}
-	resetMenu();
+void BankManager::listAccounts(double id){
+    for (unsigned i = 0; i < accounts.size(); i++)
+    {
+        for (unsigned j = 0; j < accounts.at(i).getCustomers().size(); j++)
+        {
+            if (accounts.at(i).getCustomers().at(j)->getID() == id)
+            {
+                out << accounts.at(i);
+                break;
+            }
+        }
+    }
 }
 
 //Lists all saved customers.
@@ -237,28 +226,25 @@ void BankManager::listCustomers(){
             out << "\n\n";
         }
     }
-	resetMenu();
 }
 
 //TODO print a statement for an account to be selected.
 void BankManager::printStatement(){
-	int accountID;
-	bool accountFound = false;
-	out << "Enter an account number to print: ";
-	in >> accountID;
-	if (!accounts.empty()){
-		for (unsigned i = 0; i < accounts.size(); i++){
-			//do output
-			if (accounts.at(i).getID() == accountID){
-				accounts.at(i).generateReport(out);
-				accountFound = true;
+    out << "Enter an account number to print: ";
+	handleInput();
+	while (currentState == 3){
+		if (!accounts.empty()){
+			for (unsigned i = 0; i < accounts.size(); i++){
+				//do output
+				if (accounts.at(i).getID() == currentAccount){
+					accounts.at(i).generateReport(out);
+					return;
+				}
 			}
 		}
+		out << "enter a valid input: ";
+		handleInput();
 	}
-	if (!accountFound){
-		out << "Account not Found";
-	}
-	resetMenu();
 }
 
 //Template saves to a file.
@@ -267,9 +253,7 @@ void saveFile(vector<T> vec, ofstream& outFile){
     if (!vec.empty()){
         for (unsigned i = 0; i < vec.size(); i++){
 			vec.at(i).save(outFile);
-			if (i != (vec.size() - 1)){
-				outFile << "\n";
-			}
+			outFile << "\n";
         }
     }
 }
@@ -278,13 +262,13 @@ void saveFile(vector<T> vec, ofstream& outFile){
 void BankManager::save(){
     ofstream accountFile, customerFile, transactionFile;
     
-	accountFile.open("Accountsout.txt", ios::out);
-    customerFile.open("Customersout.txt", ios::out);
-    transactionFile.open("Transactionsout.txt", ios::out);
+    accountFile.open("Accounts.txt", ios::out);
+    customerFile.open("Customers.txt", ios::out);
+    transactionFile.open("Transactions.txt", ios::out);
 	
-    saveFile(accounts, accountFile);
+    //saveFile(accounts, accountFile);
     saveFile(customers, customerFile);
-    saveFile(transactions, transactionFile);
+    //saveFile(transactions, transactionFile);
 
     accountFile.close();
     customerFile.close();
@@ -293,7 +277,7 @@ void BankManager::save(){
 
 //Template loads from a file.
 template<typename T>
-void loadFile(vector<T>& vec, ifstream& inFile){
+void loadFile(vector<T> vec, ifstream& inFile){
     T temp = T();
     while (!inFile.eof()){
         inFile >> temp;
@@ -308,9 +292,9 @@ void BankManager::load(){
     customerFile.open("Customers.txt", ios::in);
     transactionFile.open("Transactions.txt", ios::in);
     
-	loadFile(accounts, accountFile);
+        //loadFile(accounts, accountFile);
     loadFile(customers, customerFile);
-    loadFile(transactions, transactionFile);
+    //loadFile(transactions, transactionFile);
 
     accountFile.close();
     customerFile.close();
