@@ -87,11 +87,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Accounts.txt" />
-    <Text Include="Accountsout.txt" />
     <Text Include="Customers.txt" />
-    <Text Include="Customersout.txt" />
     <Text Include="Transactions.txt" />
-    <Text Include="Transactionsout.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

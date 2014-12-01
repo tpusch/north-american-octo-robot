@@ -24,7 +24,6 @@ void Customer::printAccount(ostream& os){
 	os << "\nCustomer: " << firstName << " " << lastName;
 	if (!accountNums.empty()){
 		for (unsigned i = 0; i < accountNums.size(); i++){
-			
 			os << "\nAccount ID: " << accountNums.at(i);
 		}
 	}
@@ -32,13 +31,6 @@ void Customer::printAccount(ostream& os){
 		os << "\nCustomer has no accounts";
 	}
 }
-
-//void Customer::listAccounts(){
-//    for (unsigned i = 0; i < accountsPtr.size(); i++)
-//    {
-//        cout << [i];
-//    }
-//}
 
 ostream& operator<< (ostream& os, const Customer& customer){
 	os << customer.firstName << " " << customer.lastName << " " << customer.customerID << " " << customer.ssn << " " << customer.address;
@@ -73,5 +65,9 @@ istream& operator>> (istream& is, Customer& customer){
 
 
 void Customer::save(ostream& output){
-	output << firstName << " " << lastName << " " << customerID << " " << ssn << " " << address; 
+	output << firstName << " " << lastName << " " << customerID << " " << ssn << " ";
+	for (int i = 0; i < accountNums.size(); i++){
+		output << "account: " << accountNums.at(i) << " ";
+	}
+	output << "address: "<< address;
 }

@@ -7,6 +7,8 @@
 
 #include "Account.h"
 #include "Checking.h"
+#include "Savings.h"
+#include "Certificate_of_Deposit.h"
 #include "Customer.h"
 #include "Transaction.h"
 
@@ -39,26 +41,28 @@ private:
 	void save();
 	void load();
         
-        void setup();
+    void setup();
         
 	void getDate();
 	void compoundAccounts();
         
-        void printAccountValue(string);
+    void printAccountValue(string);
         
-        void submitTransaction();
+    void submitTransaction();
         
 	int monthsPast(Account&);
 
+
+	//Member Variables
 	bool inMenu;
 	bool running;
 
 	int currentState;
 
-	std::string choice;
+	string choice;
 
-	std::istream& in;
-	std::ostream& out;
+	istream& in;
+	ostream& out;
 
 	Customer* currentCustomer;
 	int currentAccount;

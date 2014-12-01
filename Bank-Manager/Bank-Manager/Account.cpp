@@ -194,6 +194,6 @@ void Account::generateReport(ostream& output)
 }
 
 void Account::save(ostream& output){
-	output << dateOpened << " " << type << " " << accountID << " " << balance;
+	output << accountID << " " << dateOpened << " " << type <<  " " << balance;
 }
 
