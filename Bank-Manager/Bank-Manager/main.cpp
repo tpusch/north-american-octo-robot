@@ -2,12 +2,9 @@
 
 #include "BankManager.h"
 
-
-
 int main(){
+    BankManager bankManager = BankManager(std::cin, std::cout);
+    bankManager.run();
 
-	BankManager bankManager = BankManager(std::cin, std::cout);
-	bankManager.run();
-
-	return 0;
+    return 0;
 }

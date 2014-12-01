@@ -5,14 +5,15 @@
 class Checking : public Account
 {
 public:
-	//constructor/destructor
-	Checking(){};
-        void operator=(Account&);
+    //constructor/destructor
+    Checking(){};
+    void operator=(Account&);
 
-	//prototypes
-	void monthlyChores(int);
+    //prototypes
+    void monthlyChores(int);
 
 private:
-	double monthlyFee;
+    //Member Variables
+    double monthlyFee;
 };
 

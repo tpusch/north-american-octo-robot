@@ -4,13 +4,13 @@
 class Savings : public Account
 {
 public:
-	//constructor
-	Savings(){};
+    //constructor
+    Savings(){};
 
-	//prototypes
-	virtual void monthlyChores(int);
+    //prototypes
+    virtual void monthlyChores(int);
 
 private:
-	double interestRate;
+    //Member variables
+    double interestRate;
 };
-
