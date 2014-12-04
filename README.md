@@ -2,10 +2,10 @@ north-american-octo-robot
 =========================
 TODO: 
 
-add customer
-add account
-setup login screen / handle logins
-password & username stuff
-separate menus
+add customer\n
+add account\n
+setup login screen / handle logins\n
+password & username stuff\n
+separate menus\n
 
 loan account
