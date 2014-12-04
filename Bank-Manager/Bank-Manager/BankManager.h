@@ -42,6 +42,10 @@ private:
     void printStatement();
     void save();
     void load();
+    
+    void loadAccounts(vector<Account*>&, ifstream&);
+    void loadCustomers(vector<Customer*>&, ifstream&);
+    void loadTransactions(vector<Transaction*>&, ifstream&);
         
     void setup();
         
@@ -52,8 +56,7 @@ private:
         
     void submitTransaction();
         
-    int monthsPast(Account&);
-
+    int monthsPast(Account*);
 
     //Member Variables
     bool inMenu;
@@ -69,9 +72,9 @@ private:
     Customer* currentCustomer;
     int currentAccount;
 
-    vector<Customer> customers;
-    vector<Account> accounts;
-    vector<Transaction> transactions;
+    vector<Customer*> customers;
+    vector<Account*> accounts;
+    vector<Transaction*> transactions;
 
     Date currentDate;
 

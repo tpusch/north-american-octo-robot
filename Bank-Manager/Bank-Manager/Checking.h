@@ -6,11 +6,16 @@ class Checking : public Account
 {
 public:
     //constructor/destructor
-    Checking(){};
+    Checking():Account("c"){};
+    
+    //extraction operator
+    friend istream& operator>>(istream&, Checking&);
+
     void operator=(Account&);
 
     //prototypes
     void monthlyChores(int);
+    void save(ostream&);
 
 private:
     //Member Variables

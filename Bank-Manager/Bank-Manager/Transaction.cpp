@@ -9,10 +9,10 @@ Transaction::Transaction(int id, char t, double a, string loc, Date date){
 }
 
 //overload extraction operator
-istream& operator>>(istream& input, Transaction& transaction){
-    input >> transaction.accountID >> transaction.type;
-    input >> transaction.amount >> transaction.time;
-    getline(input, transaction.location);
+istream& operator>>(istream& input, Transaction* transaction){
+    input >> transaction->accountID >> transaction->type;
+    input >> transaction->amount >> transaction->time;
+    getline(input, transaction->location);
     return input;
 }
 
@@ -39,7 +39,9 @@ ostream& operator<<(ostream& output, const Transaction& transaction){
 bool Transaction::operator<(const Transaction& transaction) const
 {
     if (time == transaction.time){
-        if (type == 'd' || type == 'D' || type == 'm' || type == 'M'){
+        cerr << "time: " << time;
+        cerr << "\n transtime: " << transaction.time << endl;
+        if (type == 'd' || type == 'D' || type == 'f' || type == 'F'){
             return true;
         }
         else{

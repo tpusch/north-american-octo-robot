@@ -1,4 +1,4 @@
-John Doe 1 123-45-6789 account: 1 address:  123 North St
+John Doe 1 123-45-6789 account: 1 address: 123 North St
 Allyson Kravitz 2 594-48-0598 account: 2 account: 6 address: 9224 Clear Loop
 Danny Asmus 3 585-48-2895 account: 3 address: 3248 Red Round
 Elena Binkley 4 549-12-1098 account: 1 address: 1914 Tawny Knoll

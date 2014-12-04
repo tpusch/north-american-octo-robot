@@ -1,11 +1,8 @@
-#include <iostream>
+#include "BankManager.h"
 #include <sstream>
 #include <iomanip>
 #include <limits>
 #include <memory>
-
-#include "BankManager.h"
-
 
 using namespace std;
 
@@ -28,10 +25,7 @@ void BankManager::run(){
     setup();
     out << "<<O>><<O>> WELCOME TO DONATELLO BANK, MAKE A SELECTION <<O>><<O>>\n"
         << "   ----                                                   ----   \n" << endl;
-    //printMenu();
     while (running){
-        //update();
-        //handleInput();
         update();
     }
 }
@@ -132,7 +126,6 @@ void BankManager::resetMenu(){
         currentState = 0;
     }
     else if (response == "n"){
-        currentState = currentState;
     }
     else{
         currentState = 10;
@@ -194,7 +187,7 @@ void BankManager::printMenu(){
 
 //TODO add a new customer.
 void BankManager::addCustomer(){
-    Customer customer = Customer();
+    Customer* customer = new Customer();
     customers.push_back(customer);
 }
 
@@ -207,11 +200,10 @@ void BankManager::listAccounts(){
     //loop from 0 to size of customer vector. Compares ids to determine accounts to print.
     for (unsigned i = 0; i < customers.size(); i++)
     {
-        if(customers.at(i).getID() == id){
-            customers.at(i).printAccount(out);
+        if(customers.at(i)->getID() == id){
+            customers.at(i)->printAccount(out);
             found = true;
         }
-
     }
     if (!found){
         out << "Customer ID not found.";
@@ -224,12 +216,11 @@ void BankManager::listCustomers(){
     if (!customers.empty()){
         //loop from 0 to size of customer vector. Will print all customers.
         for (unsigned i = 0; i < customers.size(); i++){
-            Customer customer = customers.at(i);
-            //out << customer.getFirstName() << " " << customer.getLastName()
-            out	<< "\nID: " << customer.getID()
-                << "\nSSN: " << customer.getSSN()
-                << "\nAddress: " << customer.getAddress();			
-            customer.printAccount(out);		
+            //out << customers.at(i)->getFirstName() << " " << customers.at(i)->getLastName()
+            out	<< "\nID: " << customers.at(i)->getID()
+                << "\nSSN: " << customers.at(i)->getSSN()
+                << "\nAddress: " << customers.at(i)->getAddress();			
+            customers.at(i)->printAccount(out);		
             out << "\n\n";
         }
     }
@@ -245,11 +236,12 @@ void BankManager::printStatement(){
         for (unsigned i = 0; i < accounts.size(); i++){
             //do output
             //if accountID equals input id, generate statement
-            if (accounts.at(i).getID() == id){
-                out << "\nEnter a month and a year MM YYYY: ";
+            if (accounts.at(i)->getID() == id){
+                out << "Enter a month and a year MM YYYY: ";
                 int m, y;
                 in >> m >> y;
-                accounts.at(i).generateMonthlyReport(out,m,y);
+                accounts.at(i)->generateReport(out);
+                //accounts.at(i)->generateMonthlyReport(out,m,y);
                 return;
             }
         }
@@ -259,11 +251,11 @@ void BankManager::printStatement(){
 
 //Template saves to a file.
 template<typename T>
-void saveFile(vector<T> vec, ofstream& outFile){
+void saveFile(vector<T> vec , ofstream& outFile){
     if (!vec.empty()){
         //Loop from 0 to given vector size.
         for (unsigned i = 0; i < vec.size(); i++){
-            vec.at(i).save(outFile);
+            vec.at(i)->save(outFile);
             if(i < (vec.size()-1)){
                 outFile << "\n";
             }
@@ -290,33 +282,57 @@ void BankManager::save(){
 
 //Template loads from a file.
 template<typename T>
-void loadFile(vector<T>& vec, ifstream& inFile){
-    T temp = T();
+void loadFile(vector<T*>& vec, ifstream& inFile){
     //while items remain in the file
     while (!inFile.eof()){
+        T* temp = new T();
         inFile >> temp;
         vec.push_back(temp);
     }
 }
 
-//Loads accounts controlling for child type
-void loadAccounts(vector<Account>& vec, ifstream& inFile){
-    Account temp = Account();
+//Load customers and link with accounts
+void BankManager::loadCustomers(vector<Customer*>& vec, ifstream& inFile){
+    while (!inFile.eof()){
+        Customer* customer = new Customer();
+        inFile >> customer;
+        vec.push_back(customer);
+    }
+}
+
+//load transactions, note: they are linked to accounts via setup()
+void BankManager::loadTransactions(vector<Transaction*>& vec, ifstream& inFile){
     //while items remain in the file
     while (!inFile.eof()){
-        inFile >> temp;
-        //attempt to convert account to checking
-        if(temp.getType() == "c"){
-            Checking cTemp = Checking();
-            cTemp = temp;
+        Transaction* action = new Transaction();
+        inFile >> action;
+        vec.push_back(action);
+    }
+}
+
+//Loads accounts controlling for child type
+void BankManager::loadAccounts(vector<Account*>& vec, ifstream& inFile){
+    string type;
+    //while items remain in the file
+    while (!inFile.eof()){
+        inFile >> type;
+        //make checking account
+        if(type == "c" || type == "C"){
+            Checking* cTemp = new Checking();
+            inFile >> *cTemp;
             vec.push_back(cTemp);
         }
-        //TODO:
-        //attempt to convert account to savings
-        //attempt to convert account to certificate of deposit
-        
-        else{
-            vec.push_back(temp);
+        //make savings account
+        else if(type == "s" || type == "S"){
+            Savings* sTemp = new Savings();
+            inFile >> *sTemp;
+            vec.push_back(sTemp);
+        }
+        //make certificate of deposit account
+        else if(type == "cd" || type == "CD"){
+            Certificate_of_Deposit* cdTemp = new Certificate_of_Deposit();
+            inFile >> *cdTemp;
+            vec.push_back(cdTemp);
         }
     }
 }
@@ -329,8 +345,8 @@ void BankManager::load(){
     transactionFile.open("Transactions.txt", ios::in);
     
     loadAccounts(accounts, accountFile);
-    loadFile(customers, customerFile);
-    loadFile(transactions, transactionFile);
+    loadCustomers(customers, customerFile);
+    loadTransactions(transactions, transactionFile);
 
     accountFile.close();
     customerFile.close();
@@ -352,20 +368,20 @@ void BankManager::compoundAccounts(){
     //compound or charge fee depending on account type
     for (unsigned i = 0; i < accounts.size(); i++){
         count = monthsPast(accounts.at(i));
-        accounts.at(i).monthlyChores(count);
+        accounts.at(i)->monthlyChores(count);
     }
 }
 
 //Calculates months passed since the opening of a given account
-int BankManager::monthsPast(Account& account){
+int BankManager::monthsPast(Account* account){
     //check if account opening date is from the future
-    if (currentDate < account.getDate()){
+    if (currentDate < account->getDate()){
         return 0;
     }
     //set differences from current date to account opening date; calculate total months
-    int years = currentDate.getYear() - account.getDate().getYear();
-    int months = currentDate.getMonth() - account.getDate().getMonth();
-    int days = currentDate.getDay() - account.getDate().getDay();
+    int years = currentDate.getYear() - account->getDate().getYear();
+    int months = currentDate.getMonth() - account->getDate().getMonth();
+    int days = currentDate.getDay() - account->getDate().getDay();
     int totalMonths = years * 12;
     totalMonths += months;
     if (days <= 0){
@@ -382,12 +398,22 @@ void BankManager::setup(){
         //Loop from 0 to size of accounts vector
         for (unsigned j = 0; j < accounts.size(); j++){
             //link transactions with their corresponding account
-            if (transactions.at(i).getAccountID() == accounts.at(j).getID()){
-                accounts.at(j).addTransaction(transactions.at(i));
+            if (transactions.at(i)->getAccountID() == accounts.at(j)->getID()){
+                accounts.at(j)->addTransaction(transactions.at(i));
             }
         }
     }
-    //compoundAccounts();
+    for (unsigned i = 0; i < customers.size(); i++){
+        for (unsigned j = 0; j < customers.at(i)->accountNums.size(); j++){
+            int acctNum = customers.at(i)->accountNums.at(j);
+            for(unsigned k = 0; k < accounts.size(); k++){
+                if(acctNum == accounts.at(k)->getID()){
+                    customers.at(i)->addAccount(accounts.at(k));
+                }
+            }
+        }
+    }   
+    compoundAccounts();
 }
 
 //Prints the total value of all given accounts.
@@ -395,8 +421,8 @@ void BankManager::printAccountValue(string type){
     double totalBalance = 0;
     //Loop from 0 to size of accounts vector. Calculates total balance of accounts of type input
     for(unsigned i = 0; i < accounts.size(); i++ ){
-        if(accounts.at(i).getType() == type){
-            totalBalance += accounts.at(i).getValue();
+        if(accounts.at(i)->getType() == type){
+            totalBalance += accounts.at(i)->getValue();
         }
     }
     if (type == "s"){
@@ -424,7 +450,7 @@ void BankManager::submitTransaction(){
     in >> location;
     out << "Date MM/DD/YYYY: ";
     in >> d;
-    Transaction trans = Transaction(i,type,a,location,d);
+    Transaction* trans = new Transaction(i,type,a,location,d);
     transactions.push_back(trans);
     setup();
     out << "Transaction added.";

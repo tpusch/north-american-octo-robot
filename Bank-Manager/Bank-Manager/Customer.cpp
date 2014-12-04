@@ -1,4 +1,5 @@
 #include "Customer.h"
+#include "Account.h"
 
 #include <sstream>
 
@@ -8,21 +9,24 @@ using std::ostream;
 using std::ifstream;
 using std::ofstream;
 
-Customer::Customer(){}
+Customer::Customer(string fname, string lname, int id, string ss){
+    firstName = fname;
+    lastName = lname;
+    customerID = id;
+    ssn = ss;
+}
 
-Customer::~Customer(){}
-
-void Customer::addAccount(int accountNum){
-	
+void Customer::addAccount(Account* account){
+    myAccounts.push_back(account);
 }
 
 //Print all accounts associated with customer
 void Customer::printAccount(ostream& os){
     os << "\nCustomer: " << firstName << " " << lastName;
-    if (!accountNums.empty()){
+    if (!myAccounts.empty()){
         //Loop from 0 to size of accountNums vector. Prints corresponding accounts
-        for (unsigned i = 0; i < accountNums.size(); i++){
-            os << "\nAccount ID: " << accountNums.at(i);
+        for (unsigned i = 0; i < myAccounts.size(); i++){
+            os << "\nAccount ID: " << myAccounts.at(i)->getID();
         }
     }
     else{
@@ -38,26 +42,23 @@ ostream& operator<< (ostream& os, const Customer& customer){
 }
 
 //overload >>
-istream& operator>> (istream& is, Customer& customer){
+istream& operator>> (istream& is, Customer* customer){
     string line;
     string input;
 
     getline(is, line);
     istringstream row(line);
 
-    row >> customer.firstName >> customer.lastName >> customer.customerID >> customer.ssn;
-    customer.accountNums.clear();
+    row >> customer->firstName >> customer->lastName >> customer->customerID >> customer->ssn;
     while (row>>input){
         if (input == "account:"){
             //TODO this
             int accountNum;
             row >> accountNum;
-            customer.addAccount(accountNum);
-            customer.accountNums.push_back(accountNum);
+            customer->accountNums.push_back(accountNum);
         }
         if (input == "address:"){
-            //row >> customer.address;
-            getline(row, customer.address);
+            getline(row, customer->address);
         }
     }
     return is;
@@ -67,8 +68,8 @@ istream& operator>> (istream& is, Customer& customer){
 void Customer::save(ostream& output){
     output << firstName << " " << lastName << " " << customerID << " " << ssn << " ";
     //Loop from 0 to size of accountNums vector, saves info to text file in input format
-    for (int i = 0; i < accountNums.size(); i++){
-        output << "account: " << accountNums.at(i) << " ";
+    for (int i = 0; i < myAccounts.size(); i++){
+        output << "account: " << myAccounts.at(i)->getID() << " ";
     }
     output << "address: "<< address;
 }

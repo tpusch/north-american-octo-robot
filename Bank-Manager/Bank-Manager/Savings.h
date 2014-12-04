@@ -5,10 +5,13 @@ class Savings : public Account
 {
 public:
     //constructor
-    Savings(){};
-
+    Savings():Account("s"){};
+    
+    friend istream& operator>>(istream&, Savings&);
+    
     //prototypes
     virtual void monthlyChores(int);
+    virtual void save(ostream&);
 
 private:
     //Member variables

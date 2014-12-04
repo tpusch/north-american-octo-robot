@@ -10,12 +10,12 @@ using namespace std;
 class Transaction {
 public:
     //constructors/destructor
-    Transaction() {};
+    Transaction(){};
     Transaction(int,char,double,string,Date);
     virtual ~Transaction(){}
 
     //prototypes
-    friend istream& operator>>(istream&, Transaction&);
+    friend istream& operator>>(istream&, Transaction*);
     friend ostream& operator<<(ostream&, const Transaction&);
     bool operator<(const Transaction&) const;
     void save(ostream&);
