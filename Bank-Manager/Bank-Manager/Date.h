@@ -7,15 +7,15 @@ using namespace std;
 class Date {
 public:
     //constructors/destructor
-    Date() {}
+    Date(){}
     virtual ~Date(){}
     
     //prototypes
     friend istream& operator>>(istream&, Date&);
     friend ostream& operator<<(ostream&, const Date&);
     bool operator<(const Date&) const;
-	bool operator==(const Date&) const;
-	void setDate(int, int, int);
+    bool operator==(const Date&) const;
+    void setDate(int, int, int);
     
     //simple one line accessors
     int getMonth() { return month; }
@@ -25,6 +25,7 @@ public:
     char getSeparator2() { return separator2; }
     
 private:
+    //Member variables
     int month, day, year;
     char separator1, separator2;
 };

@@ -5,13 +5,20 @@
 class Checking : public Account
 {
 public:
-	//constructor/destructor
-	Checking(){};
+    //constructor/destructor
+    Checking():Account("c"){};
+    
+    //extraction operator
+    friend istream& operator>>(istream&, Checking&);
 
-	//prototypes
-	void monthlyChores(int);
+    void operator=(Account&);
+
+    //prototypes
+    void monthlyChores(int);
+    void save(ostream&);
 
 private:
-	double monthlyFee;
+    //Member Variables
+    double monthlyFee;
 };
 
