@@ -55,3 +55,7 @@ bool Transaction::operator<(const Transaction& transaction) const
 void Transaction::save(ostream& output){
     output << accountID << " " << type << " " << amount << " " << time << " " << location;
 }
+
+bool compare(Transaction* trans1, Transaction* trans2){
+	return *trans1 < *trans2;
+}

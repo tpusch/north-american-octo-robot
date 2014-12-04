@@ -14,7 +14,7 @@ void Account::addCustomer(Customer* newCust){
 
 //method to sort transactions vector
 void Account::sortTransactions(){
-    sort(transactions.begin(), transactions.end());
+	sort(transactions.begin(), transactions.end(), compare);
 }
 
 //overload >>

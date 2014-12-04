@@ -42,3 +42,5 @@ private:
     string location;
     int accountID;
 };
+
+bool compare(Transaction*, Transaction*);

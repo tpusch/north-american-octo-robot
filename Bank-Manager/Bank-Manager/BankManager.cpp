@@ -413,7 +413,7 @@ void BankManager::setup(){
             }
         }
     }   
-    compoundAccounts();
+	compoundAccounts();
 }
 
 //Prints the total value of all given accounts.
