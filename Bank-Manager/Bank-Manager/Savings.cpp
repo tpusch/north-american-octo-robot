@@ -16,7 +16,7 @@ void Savings::monthlyChores(int numMonths){
     for (int i = 0; i < numMonths; i++){
         Transaction* action = new Transaction();
         action->setAccountID(accountID);
-        action->setAmount(balance * interestRate);
+        action->setAmount(getValue() * (interestRate/12));
         action->setLocation("bank");
         action->setType('c');
         if (theMonth == 13){
@@ -27,6 +27,7 @@ void Savings::monthlyChores(int numMonths){
         date.setDate(theMonth, theDay, theYear);
         action->setDate(date);
         transactions.push_back(action);
+		theMonth++;
     }
 }
 

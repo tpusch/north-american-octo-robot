@@ -113,7 +113,7 @@ void Account::generateMonthlyReport(ostream& output, int month, int year){
             if (transactions.at(i)->getType() == 'c' || transactions.at(i)->getType() == 'C'){
                 cumulativeBalance += transactions.at(i)->getAmount();
             }
-            output << "Balance: $" << cumulativeBalance;
+			output << "Balance: $" << cumulativeBalance << endl;
         }
         //if transaction isn't in desired month, simply update balance
         else{

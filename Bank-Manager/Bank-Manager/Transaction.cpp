@@ -39,8 +39,6 @@ ostream& operator<<(ostream& output, const Transaction& transaction){
 bool Transaction::operator<(const Transaction& transaction) const
 {
     if (time == transaction.time){
-        cerr << "time: " << time;
-        cerr << "\n transtime: " << transaction.time << endl;
         if (type == 'd' || type == 'D' || type == 'f' || type == 'F'){
             return true;
         }
@@ -53,7 +51,7 @@ bool Transaction::operator<(const Transaction& transaction) const
 
 //save to transactions to text file in input format
 void Transaction::save(ostream& output){
-    output << accountID << " " << type << " " << amount << " " << time << " " << location;
+    output << accountID << " " << type << " " << amount << " " << time << "" << location;
 }
 
 bool compare(Transaction* trans1, Transaction* trans2){

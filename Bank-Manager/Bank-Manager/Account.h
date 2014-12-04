@@ -44,6 +44,10 @@ public:
 protected:
     //Member variables
     double balance;
+
+	double openingBalance;
+	double currentBalance;
+
     int accountID;
     Date dateOpened;
     string type;

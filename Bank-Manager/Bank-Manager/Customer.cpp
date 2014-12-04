@@ -26,12 +26,32 @@ void Customer::printAccount(ostream& os){
     if (!myAccounts.empty()){
         //Loop from 0 to size of accountNums vector. Prints corresponding accounts
         for (unsigned i = 0; i < myAccounts.size(); i++){
-            os << "\nAccount ID: " << myAccounts.at(i)->getID();
+			if (myAccounts.at(i)->getType() == "c"){
+				os << "\nChecking ";
+			}
+			if (myAccounts.at(i)->getType() == "s"){
+				os << "\nSavings ";
+			}
+			if (myAccounts.at(i)->getType() == "cd"){
+				os << "\nCertificate of Deposit ";
+			}
+			os << "ID " << myAccounts.at(i)->getID() << ": " << myAccounts.at(i)->getValue();
         }
     }
     else{
         os << "\nCustomer has no accounts";
     }
+}
+
+void Customer::printAccountValues(ostream& os){
+	double totalValue = 0;
+	if (!myAccounts.empty()){
+		//Loop from 0 to size of accountNums vector. Prints corresponding accounts
+		for (unsigned i = 0; i < myAccounts.size(); i++){
+			totalValue += myAccounts.at(i)->getValue();
+		}
+	}
+	os << "\nTotal value of all accounts: $" << totalValue;
 }
 
 //overload <<
@@ -71,5 +91,5 @@ void Customer::save(ostream& output){
     for (int i = 0; i < myAccounts.size(); i++){
         output << "account: " << myAccounts.at(i)->getID() << " ";
     }
-    output << "address: "<< address;
+    output << "address:"<< address;
 }

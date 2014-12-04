@@ -26,6 +26,7 @@ public:
     void printAccount(ostream&);
     void addAccount(Account*);
     void save(ostream&);
+	void printAccountValues(ostream& os);
 
     //overloaded operators
     friend std::ostream& operator<< (std::ostream&, const Customer&);

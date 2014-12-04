@@ -23,6 +23,7 @@ public:
 
     //run prototype
     void run();
+	void load();
 	
 private:
     //Lots of prototypes
@@ -41,7 +42,7 @@ private:
     void listCustomers();
     void printStatement();
     void save();
-    void load();
+    
     
     void loadAccounts(vector<Account*>&, ifstream&);
     void loadCustomers(vector<Customer*>&, ifstream&);
@@ -79,4 +80,6 @@ private:
     Date currentDate;
 
     string temp;
+
+	bool manager;
 };

@@ -29,7 +29,7 @@ public:
 
     //simple one line modifiers
     void setDate(const Date& t){ time = t; }
-    void setAmount(int a){ amount = a; }
+    void setAmount(double a){ amount = a; }
     void setType(char t){ type = t; }
     void setLocation(string l){ location = l; }
     void setAccountID(int a){ accountID = a; }

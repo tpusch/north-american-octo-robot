@@ -14,6 +14,7 @@ BankManager::BankManager(istream& inStream, ostream& outStream)
 	currentState = 0;
 	out << fixed;
 	out << setprecision(2);
+	manager = false;
     }
 
 //Default Destructor
@@ -23,10 +24,17 @@ BankManager::~BankManager(){}
 void BankManager::run(){
     load();
     setup();
+	//TODO: login
+	//login();
     out << "<<O>><<O>> WELCOME TO DONATELLO BANK, MAKE A SELECTION <<O>><<O>>\n"
         << "   ----                                                   ----   \n" << endl;
     while (running){
-        update();
+		if (manager){
+			update();
+		}
+		else{
+			customerUpdate();
+		}
     }
 }
 
@@ -90,6 +98,12 @@ void BankManager::update(){
         currentState = 0;
         break;
     }
+}
+
+
+//TODO: customer menu
+void customerUpdate(){
+
 }
 
 //Handles keyboard input based on state
@@ -175,7 +189,7 @@ void BankManager::printMenu(){
     //<< "Type \"quit\" or \"exit\" at any time to stop the program\n\n"
     out << "\n\tMain Menu\n"
         << "1. Submit a Transaction\n"
-        << "2. List all Accounts\n"
+        << "2. List all Accounts for a Customer\n"
         << "3. Print a Monthly Statement\n"
         << "4. Print Savings Value\n"
         << "5. Print Checking Value\n"
@@ -217,10 +231,11 @@ void BankManager::listCustomers(){
         //loop from 0 to size of customer vector. Will print all customers.
         for (unsigned i = 0; i < customers.size(); i++){
             //out << customers.at(i)->getFirstName() << " " << customers.at(i)->getLastName()
-            out	<< "\nID: " << customers.at(i)->getID()
+            out	<< "\nCustomer ID: " << customers.at(i)->getID()
                 << "\nSSN: " << customers.at(i)->getSSN()
                 << "\nAddress: " << customers.at(i)->getAddress();			
             customers.at(i)->printAccount(out);		
+			customers.at(i)->printAccountValues(out);
             out << "\n\n";
         }
     }
@@ -240,8 +255,9 @@ void BankManager::printStatement(){
                 out << "Enter a month and a year MM YYYY: ";
                 int m, y;
                 in >> m >> y;
-                accounts.at(i)->generateReport(out);
-                //accounts.at(i)->generateMonthlyReport(out,m,y);
+                //use for testing all transactions
+				//accounts.at(i)->generateReport(out);
+				accounts.at(i)->generateMonthlyReport(out,m,y);
                 return;
             }
         }
@@ -439,19 +455,29 @@ void BankManager::printAccountValue(string type){
 //Takes in transaction information and creates a new transaction.
 //TODO: Safe input handling
 void BankManager::submitTransaction(){
-    int i; double a; char type; string location; Date d;   
-    out << "Account number: ";
-    in >> i;
+	string input;
+	int id; double a; char type; string location; Date d;   
+	Transaction* trans = new Transaction();
+	out << "Account number: ";
+	in >> id;
+	trans->setAccountID(id);
     out << "Type (w)ithdrawl or (d)eposit: ";
-    in >> type;
+	in >> type;
+	trans->setType(type);
     out << "Amount: ";
     in >> a;
+	trans->setAmount(a);
     out << "Location: ";
     in >> location;
+	trans->setLocation(location);
     out << "Date MM/DD/YYYY: ";
     in >> d;
-    Transaction* trans = new Transaction(i,type,a,location,d);
+	trans->setDate(d);
     transactions.push_back(trans);
-    setup();
+	for (unsigned i = 0; i < accounts.size(); i++){
+		if (accounts.at(i)->getID() == id){
+			accounts.at(i)->addTransaction(trans);
+		}
+	}
     out << "Transaction added.";
 }

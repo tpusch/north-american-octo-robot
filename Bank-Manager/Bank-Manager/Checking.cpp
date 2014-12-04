@@ -39,7 +39,6 @@ void Checking::monthlyChores(int numMonths){
         //cerr << action;
         theMonth++;
     }
-    sortTransactions();
 }
 
 void Checking::save(ostream& output){
