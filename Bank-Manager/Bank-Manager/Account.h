@@ -32,6 +32,11 @@ public:
     //virtual methods
     virtual void monthlyChores(int) = 0;
     virtual void save(ostream&) = 0;
+    
+    //simple setters
+    void setBalance(double b){ balance = b; }
+    void setDate(Date d){ dateOpened = d; }
+    void setID(int id){ accountID = id; }
 
     //simple one line accessors
     vector<Transaction*> getTransactions(){ return transactions; }
@@ -45,8 +50,8 @@ protected:
     //Member variables
     double balance;
 
-	double openingBalance;
-	double currentBalance;
+    double openingBalance;
+    double currentBalance;
 
     int accountID;
     Date dateOpened;

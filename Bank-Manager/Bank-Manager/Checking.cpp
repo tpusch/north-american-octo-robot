@@ -24,7 +24,7 @@ void Checking::monthlyChores(int numMonths){
     for (int i = 0; i < numMonths; i++){
         Transaction* action = new Transaction();
         action->setAccountID(accountID);
-        action->setAmount(20);
+        action->setAmount(monthlyFee);
         action->setLocation("bank");
         action->setType('f');
         

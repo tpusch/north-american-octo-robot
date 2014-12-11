@@ -27,7 +27,7 @@ void Savings::monthlyChores(int numMonths){
         date.setDate(theMonth, theDay, theYear);
         action->setDate(date);
         transactions.push_back(action);
-		theMonth++;
+        theMonth++;
     }
 }
 

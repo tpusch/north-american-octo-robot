@@ -23,26 +23,30 @@ public:
 
     //run prototype
     void run();
-	void load();
+    void load();
 	
 private:
     //Lots of prototypes
     void menuInput(std::string);
     void update();
+    void customerUpdate();
 
     void printMenu();
+    void printCustomerMenu();
     void printHeader();
 
     void handleInput();
     void resetMenu();
 
     void addCustomer();
+    void addAccount(int);
 
-    void listAccounts();
+    void listAccounts(int);
     void listCustomers();
     void printStatement();
     void save();
-    
+    void login();
+    void logout();
     
     void loadAccounts(vector<Account*>&, ifstream&);
     void loadCustomers(vector<Customer*>&, ifstream&);
@@ -56,6 +60,7 @@ private:
     void printAccountValue(string);
         
     void submitTransaction();
+    void customerTransaction(char);
         
     int monthsPast(Account*);
 
@@ -81,5 +86,5 @@ private:
 
     string temp;
 
-	bool manager;
+    bool manager;
 };

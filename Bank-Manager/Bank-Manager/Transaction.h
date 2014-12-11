@@ -12,7 +12,7 @@ public:
     //constructors/destructor
     Transaction(){};
     Transaction(int,char,double,string,Date);
-    virtual ~Transaction(){}
+    virtual ~Transaction(){};
 
     //prototypes
     friend istream& operator>>(istream&, Transaction*);

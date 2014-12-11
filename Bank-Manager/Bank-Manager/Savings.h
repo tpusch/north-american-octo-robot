@@ -5,7 +5,7 @@ class Savings : public Account
 {
 public:
     //constructor
-    Savings():Account("s"){};
+    Savings():Account("s"){ interestRate = 0.04; }
     
     friend istream& operator>>(istream&, Savings&);
     

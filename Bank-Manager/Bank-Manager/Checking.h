@@ -6,7 +6,7 @@ class Checking : public Account
 {
 public:
     //constructor/destructor
-    Checking():Account("c"){};
+    Checking():Account("c"){ monthlyFee = 20.00; }
     
     //extraction operator
     friend istream& operator>>(istream&, Checking&);

@@ -16,10 +16,7 @@ void Certificate_of_Deposit::monthlyChores(int numMonths){
     for (int i = 0; i < numMonths; i++){
         Transaction* action = new Transaction();
         action->setAccountID(accountID);
-
-        //TODO: update current balance here
-
-		action->setAmount(getValue() * (interestRate/12));
+        action->setAmount(getValue() * (interestRate/12));
         action->setLocation("bank");
         action->setType('c');
         if (theMonth == 13){
@@ -30,7 +27,7 @@ void Certificate_of_Deposit::monthlyChores(int numMonths){
         date.setDate(theMonth, theDay, theYear);
         action->setDate(date);
         transactions.push_back(action);
-		theMonth++;
+        theMonth++;
     }
 }
 

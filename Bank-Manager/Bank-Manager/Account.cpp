@@ -14,7 +14,7 @@ void Account::addCustomer(Customer* newCust){
 
 //method to sort transactions vector
 void Account::sortTransactions(){
-	sort(transactions.begin(), transactions.end(), compare);
+    sort(transactions.begin(), transactions.end(), compare);
 }
 
 //overload >>
@@ -27,13 +27,13 @@ istream& operator>>(istream& input, Account& account){
 ostream& operator<<(ostream& output, const Account& account){
     output << "Account #: " << account.accountID << "  Date Opened: " << account.dateOpened;
     if (account.type == "c" || account.type == "C"){
-            output << "  Type: Checking  Balance: ";
+        output << "  Type: Checking  Balance: ";
     }
     else if (account.type == "s" || account.type == "S"){
-            output << "  Type: Savings  Balance: ";
+        output << "  Type: Savings  Balance: ";
     }
     else if (account.type == "cd" || account.type == "CD"){
-            output << "  Type: Certificate of Deposit  Balance: ";
+        output << "  Type: Certificate of Deposit  Balance: ";
     }
     output << account.balance << "\n";
     return output;
@@ -113,7 +113,7 @@ void Account::generateMonthlyReport(ostream& output, int month, int year){
             if (transactions.at(i)->getType() == 'c' || transactions.at(i)->getType() == 'C'){
                 cumulativeBalance += transactions.at(i)->getAmount();
             }
-			output << "Balance: $" << cumulativeBalance << endl;
+            output << "Balance: $" << cumulativeBalance << endl;
         }
         //if transaction isn't in desired month, simply update balance
         else{
@@ -145,7 +145,7 @@ void Account::generateReport(ostream& output)
 
         //add to balance
         if (transactions.at(i)->getType() == 'd' || transactions.at(i)->getType() == 'D'){
-                balance += transactions.at(i)->getAmount();
+            balance += transactions.at(i)->getAmount();
         }
 
         //check for overdraft and update balance

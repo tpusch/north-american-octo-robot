@@ -55,5 +55,5 @@ void Transaction::save(ostream& output){
 }
 
 bool compare(Transaction* trans1, Transaction* trans2){
-	return *trans1 < *trans2;
+    return *trans1 < *trans2;
 }

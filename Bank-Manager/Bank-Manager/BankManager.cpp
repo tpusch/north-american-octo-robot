@@ -15,6 +15,7 @@ BankManager::BankManager(istream& inStream, ostream& outStream)
 	out << fixed;
 	out << setprecision(2);
 	manager = false;
+        currentCustomer = NULL;
     }
 
 //Default Destructor
@@ -24,18 +25,64 @@ BankManager::~BankManager(){}
 void BankManager::run(){
     load();
     setup();
-	//TODO: login
-	//login();
+    compoundAccounts();
+    //TODO: login
     out << "<<O>><<O>> WELCOME TO DONATELLO BANK, MAKE A SELECTION <<O>><<O>>\n"
         << "   ----                                                   ----   \n" << endl;
+    login();
     while (running){
-		if (manager){
-			update();
-		}
-		else{
-			customerUpdate();
-		}
+        if (manager){
+            update();
+        }
+        else{
+            customerUpdate();
+        }
     }
+}
+
+void BankManager::login(){
+    while (true){
+        string uname, pass;
+        out << "Enter user name: ";
+        in >> uname;       
+        if (uname == "admin"){
+            out << "Vhat iz zee passverd?! ";
+            in >> pass;
+            if (pass == "password"){
+                manager = true;
+                return;
+            }
+            else{
+                out << "WRONG! TRY AGAIN!\n";
+            }
+        }
+        else{
+            for (unsigned i = 0; i < customers.size(); i++){
+                if (customers.at(i)->getUName() == uname){
+                    out << customers.at(i)->getUName() << "'s password: ";
+                    in >> pass;
+                    if(pass == customers.at(i)->getPass()){
+                        currentCustomer = customers.at(i);
+                        return;
+                    }
+                    else{
+                        out << "WRONG SUCKA!\n";
+                    }
+                }
+            }
+        }
+        if (!in.good()){
+            running = false;
+            break;
+        }
+    }   
+}
+
+void BankManager::logout(){
+    manager = false;
+    currentCustomer = NULL;
+    currentState = 0;
+    login();
 }
 
 //Updates the screen based on the current program state.
@@ -52,7 +99,10 @@ void BankManager::update(){
         break;
     case 2: //List all accounts for a given customer
         out << "2. List all accounts\n";
-        listAccounts();
+        int id;
+        out << "Enter a Customer ID: ";
+        in >> id;
+        listAccounts(id);
         resetMenu();
         break;
     case 3: //Print a Monthly statement for a specific account
@@ -76,7 +126,7 @@ void BankManager::update(){
         resetMenu();
         break;
     case 7: //List all customers 
-            //TODO and the total value of all their accounts
+            //and the total value of all their accounts
         out << "7. List all Customers\n";
         listCustomers();
         resetMenu();
@@ -93,6 +143,16 @@ void BankManager::update(){
         out << "Sorry, that is an invalid input\n";
         currentState = 0;
         break;
+    case 11:
+        out << "11. Add a customer\n";
+        addCustomer();
+        resetMenu();
+        break;
+    case 12:
+        out << "12. Add an Account\n";
+        addAccount(0);
+        resetMenu();
+        break;
     default: //Invalid input
         out << "Sorry, that is an invalid input\n";
         currentState = 0;
@@ -100,10 +160,48 @@ void BankManager::update(){
     }
 }
 
-
 //TODO: customer menu
-void customerUpdate(){
-
+void BankManager::customerUpdate(){
+    switch (currentState){
+    case 0:
+        printCustomerMenu();
+        handleInput();
+        break;
+    case 1:
+        out << "1. Make a Deposit\n";
+        customerTransaction('d');
+        resetMenu();
+        break;
+    case 2:
+        out << "2. Make a Withdrawal\n";
+        customerTransaction('w');
+        resetMenu();
+        break;
+    case 3:
+        out << "3. List Accounts\n";
+        listAccounts(currentCustomer->getID());
+        resetMenu();
+        break;
+    case 4:
+        out << "4. Print a Monthly Statement\n";
+        printStatement();
+        resetMenu();
+        break;
+    case 5:
+        out << "5. Save\n";
+        save();
+        resetMenu();
+        break;
+    case 8:
+        logout();
+        break;
+    case 9:
+        running = false;
+    default:
+        out << "Invalid input";
+        currentState = 0;
+        break;
+    }
 }
 
 //Handles keyboard input based on state
@@ -178,6 +276,12 @@ void BankManager::menuInput(string choice){
     else if (choice == "9" || choice == "quit" || choice == "exit"){
         currentState = 9;
     }
+    else if(choice == "11"){
+        currentState = 11;
+    }
+    else if(choice == "12"){
+        currentState = 12;
+    }
     else{
         currentState = 10;
     }
@@ -196,21 +300,29 @@ void BankManager::printMenu(){
         << "6. Print CD Value\n"
         << "7. List all Customers\n"
         << "8. Save\n"
-        << "9. Exit\n" << endl;
+        << "9. Exit\n" 
+        << "11. Add Customer\n"
+        << "12. Add Account\n"  << endl;
 }
 
-//TODO add a new customer.
-void BankManager::addCustomer(){
-    Customer* customer = new Customer();
-    customers.push_back(customer);
+void BankManager::printCustomerMenu(){
+    out << "\n\tMain Menu\n"
+        << "1. Make a deposit\n"
+        << "2. Make a Withdrawal\n"
+        << "3. List Accounts\n"
+        << "4. Print Monthly Statement\n" 
+        << "5. Save\n"
+        << "8. Logout\n"
+        << "9. Quit\n" << endl;
 }
+
+
 
 //TODO list all accounts for the current customer.
-void BankManager::listAccounts(){
-    int id;
+void BankManager::listAccounts(int idIN){
+    
+    int id = idIN;
     bool found = false;
-    out << "Enter a Customer ID: ";
-    in >> id;
     //loop from 0 to size of customer vector. Compares ids to determine accounts to print.
     for (unsigned i = 0; i < customers.size(); i++)
     {
@@ -244,22 +356,35 @@ void BankManager::listCustomers(){
 //Prints a statement for an account to be selected.
 void BankManager::printStatement(){
     int id;
+    bool toprint = false;
     out << "Enter an account number to print: ";
     in >> id;
     if (!accounts.empty()){
         //Loop from 0 to size of accounts vector to find correct account.
-        for (unsigned i = 0; i < accounts.size(); i++){
+        for (unsigned i = 0; i < accounts.size(); i++){           
             //do output
             //if accountID equals input id, generate statement
             if (accounts.at(i)->getID() == id){
-                out << "Enter a month and a year MM YYYY: ";
-                int m, y;
-                in >> m >> y;
-                //use for testing all transactions
-				//accounts.at(i)->generateReport(out);
-				accounts.at(i)->generateMonthlyReport(out,m,y);
-                return;
+                for(unsigned j = 0; j < currentCustomer->accountNums.size(); j++){
+                    if(id == currentCustomer->accountNums.at(j)){
+                        toprint = true;
+                    }
+                }
+                if(toprint || manager){ 
+                    out << "Enter a month and a year MM YYYY: ";
+                    int m, y;
+                    in >> m >> y;
+                    //use for testing all transactions
+                    //accounts.at(i)->generateReport(out);
+                    accounts.at(i)->generateMonthlyReport(out,m,y);
+                    return;
+                }
+                else{
+                    out << "That is not your account";
+                    return;
+                }
             }
+            
         }
     }
 	
@@ -429,7 +554,6 @@ void BankManager::setup(){
             }
         }
     }   
-	compoundAccounts();
 }
 
 //Prints the total value of all given accounts.
@@ -452,32 +576,185 @@ void BankManager::printAccountValue(string type){
     }
 }
 
+//TODO add a new customer.
+void BankManager::addCustomer(){
+    Customer* customer = new Customer();
+    string fname, lname, ssn, address, uname, pass;
+    int id;
+    string choice;
+    
+    out << "First Name: ";
+    in >> fname;
+    customer->setFirstName(fname);
+    
+    out << "Last Name: ";
+    in >> lname;
+    customer->setLastName(lname);
+    
+    out << "SSN: ";
+    in >> ssn;
+    customer->setSSN(ssn);
+    
+    out << "User Name: ";
+    in >> uname;
+    customer->setUName(uname);
+    
+    out << "Password: ";
+    in >> pass;
+    customer->setPass(pass);
+
+    out << "Add new account or connect old (new/old)? ";
+    in >> choice;
+    if(choice == "new"){
+        addAccount(customers.size()+1);
+        id = customers.size()+1;
+    }
+    else if(choice == "old"){
+        out << "Account ID: ";
+        in >> id;
+        customer->accountNums.push_back(id); 
+        for(unsigned i = 0; i < accounts.size(); i++){
+            if(id == accounts.at(i)->getID()){
+                customer->addAccount(accounts.at(i));
+            }
+        }
+    }
+    customer->setID(customers.size()+1);
+    out << "Address: ";
+    //in >> address;
+    //in.ignore();
+    getline(in, address);
+    
+    getline(in, address);   
+    customer->setAddress(address);
+    
+    
+    customers.push_back(customer);
+}
+
+void BankManager::addAccount(int custID){
+    string type;
+    double balance;
+    int id;
+    out << "Opening Balance: ";
+    in >> balance;
+    if(custID == 0){
+        out << "Customer ID: "; 
+        in >> id;
+    }
+    out << "Account Type(c/s/cd): ";
+    
+    in >> type;
+    if(type == "c" || type == "C"){
+        Checking* cTemp = new Checking();
+        cTemp->setBalance(balance);
+        cTemp->setDate(currentDate);
+        cTemp->setID(accounts.size()+1);
+        accounts.push_back(cTemp);
+        for(unsigned i = 0; i < customers.size(); i++){
+            if(customers.at(i)->getID() == id){
+                customers.at(i)->accountNums.push_back(accounts.size()+1);
+                customers.at(i)->addAccount(cTemp);
+            }
+        }
+    }
+    //make savings account
+    else if(type == "s" || type == "S"){
+        Savings* sTemp = new Savings();
+        sTemp->setBalance(balance);
+        sTemp->setDate(currentDate);
+        sTemp->setID(accounts.size()+1);
+        accounts.push_back(sTemp);
+        for(unsigned i = 0; i < customers.size(); i++){
+            if(customers.at(i)->getID() == id){
+                customers.at(i)->accountNums.push_back(accounts.size()+1);
+                customers.at(i)->addAccount(sTemp);
+            }
+        }
+    }
+    //make certificate of deposit account
+    else if(type == "cd" || type == "CD"){
+        Certificate_of_Deposit* cdTemp = new Certificate_of_Deposit();
+        cdTemp->setBalance(balance);
+        cdTemp->setDate(currentDate);
+        cdTemp->setID(accounts.size()+1);
+        Date d;
+        out << "Maturity Date: ";
+        in >> d;
+        cdTemp->setMaturityDate(d);
+        accounts.push_back(cdTemp);
+        for(unsigned i = 0; i < customers.size(); i++){
+            if(customers.at(i)->getID() == id){
+                customers.at(i)->accountNums.push_back(accounts.size()+1);
+                customers.at(i)->addAccount(cdTemp);
+            }
+        }
+    }
+}
+
 //Takes in transaction information and creates a new transaction.
 //TODO: Safe input handling
 void BankManager::submitTransaction(){
-	string input;
-	int id; double a; char type; string location; Date d;   
-	Transaction* trans = new Transaction();
-	out << "Account number: ";
-	in >> id;
-	trans->setAccountID(id);
+    string input;
+    int id; double a; char type; string location; Date d;   
+    Transaction* trans = new Transaction();
+    out << "Account number: ";
+    in >> id;
+    trans->setAccountID(id);
     out << "Type (w)ithdrawl or (d)eposit: ";
-	in >> type;
-	trans->setType(type);
+    in >> type;
+    trans->setType(type);
     out << "Amount: ";
     in >> a;
-	trans->setAmount(a);
+    trans->setAmount(a);
     out << "Location: ";
-    in >> location;
-	trans->setLocation(location);
+    //in >> location;
+    getline(in, location);
+    getline(in, location);
+    trans->setLocation(location);
     out << "Date MM/DD/YYYY: ";
     in >> d;
-	trans->setDate(d);
+    trans->setDate(d);
     transactions.push_back(trans);
 	for (unsigned i = 0; i < accounts.size(); i++){
-		if (accounts.at(i)->getID() == id){
-			accounts.at(i)->addTransaction(trans);
-		}
+            if (accounts.at(i)->getID() == id){
+                accounts.at(i)->addTransaction(trans);
+            }
+	}
+    out << "Transaction added.";
+}
+
+void BankManager::customerTransaction(char type){
+    bool submit;
+    int id; double a; 
+    Transaction* trans = new Transaction();
+    out << "Account number: ";
+    in >> id;   
+    for (unsigned i = 0; i < accounts.size(); i++){
+        if(id == accounts.at(i)->getID()){
+            for(unsigned j = 0; j < currentCustomer->accountNums.size(); j++){
+                if(id == currentCustomer->accountNums.at(j)){
+                    submit = true;
+                }
+            }
+        }
+    }
+    if(!submit){
+        out << "Not your account sucka";
+        return;
+    }
+    trans->setAccountID(id);
+    out << "Amount: ";
+    in >> a;
+    trans->setType(type);
+    trans->setAmount(a);
+    trans->setLocation(" bank");
+    trans->setDate(currentDate);
+    transactions.push_back(trans);
+	for (unsigned i = 0; i < accounts.size(); i++){
+            if (accounts.at(i)->getID() == id){
+                accounts.at(i)->addTransaction(trans);
+            }
 	}
     out << "Transaction added.";
 }

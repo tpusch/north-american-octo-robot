@@ -36,9 +36,9 @@ bool Date::operator==(const Date& date) const
     return false;
 }
 void Date::setDate(int m, int d, int y){
-	month = m;
-	day = d;
-	year = y;
-	separator1 = '/';
-	separator2 = '/';
+    month = m;
+    day = d;
+    year = y;
+    separator1 = '/';
+    separator2 = '/';
 }
