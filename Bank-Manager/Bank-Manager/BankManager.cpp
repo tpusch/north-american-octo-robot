@@ -131,27 +131,30 @@ void BankManager::update(){
         listCustomers();
         resetMenu();
         break;
-    case 8: //Save accounts, transactions, and customers
-        out << "8. Save\n";
+    case 10: //Save accounts, transactions, and customers
+        out << "Saved\n";
         save();
         resetMenu();
         break;
-    case 9: //Exit the program
+    case 11: //Exit the program
         running = false;
         break;
-    case 10: //Invalid input
+    case 100: //Invalid input
         out << "Sorry, that is an invalid input\n";
         currentState = 0;
         break;
-    case 11:
-        out << "11. Add a customer\n";
+    case 8:
+        out << "8. Add a customer\n";
         addCustomer();
         resetMenu();
         break;
-    case 12:
-        out << "12. Add an Account\n";
+    case 9:
+        out << "9. Add an Account\n";
         addAccount(0);
         resetMenu();
+        break;
+    case 12:
+        logout();
         break;
     default: //Invalid input
         out << "Sorry, that is an invalid input\n";
@@ -195,7 +198,7 @@ void BankManager::customerUpdate(){
     case 8:
         logout();
         break;
-    case 9:
+    case 11:
         running = false;
     default:
         out << "Invalid input";
@@ -240,7 +243,7 @@ void BankManager::resetMenu(){
     else if (response == "n"){
     }
     else{
-        currentState = 10;
+        currentState = 100;
     }
 }
 
@@ -273,17 +276,25 @@ void BankManager::menuInput(string choice){
     else if (choice == "8"){
         currentState = 8;
     }
-    else if (choice == "9" || choice == "quit" || choice == "exit"){
-        currentState = 9;
+    else if (choice == "9"){
+        if (manager){
+            currentState = 9;
+        }
+        else{
+            currentState = 11;
+        }
     }
-    else if(choice == "11"){
+    else if (choice == "10"){
+        currentState = 10;
+    }
+    else if(choice == "11" || choice == "quit" || choice == "exit"){
         currentState = 11;
     }
     else if(choice == "12"){
         currentState = 12;
     }
     else{
-        currentState = 10;
+        currentState = 100;
     }
 }
 
@@ -299,10 +310,11 @@ void BankManager::printMenu(){
         << "5. Print Checking Value\n"
         << "6. Print CD Value\n"
         << "7. List all Customers\n"
-        << "8. Save\n"
-        << "9. Exit\n" 
-        << "11. Add Customer\n"
-        << "12. Add Account\n"  << endl;
+        << "8. Add New Customer\n"
+        << "9. Add New Account\n"
+        << "10. Save\n" 
+        << "11. Exit\n" 
+        << "12. Logout\n" << endl;
 }
 
 void BankManager::printCustomerMenu(){
@@ -347,7 +359,7 @@ void BankManager::listCustomers(){
                 << "\nSSN: " << customers.at(i)->getSSN()
                 << "\nAddress: " << customers.at(i)->getAddress();			
             customers.at(i)->printAccount(out);		
-			customers.at(i)->printAccountValues(out);
+            customers.at(i)->printAccountValues(out);
             out << "\n\n";
         }
     }
@@ -365,9 +377,11 @@ void BankManager::printStatement(){
             //do output
             //if accountID equals input id, generate statement
             if (accounts.at(i)->getID() == id){
-                for(unsigned j = 0; j < currentCustomer->accountNums.size(); j++){
-                    if(id == currentCustomer->accountNums.at(j)){
-                        toprint = true;
+                if(currentCustomer != NULL){
+                    for(int j = 0; j < currentCustomer->getAccounts().size(); j++){
+                        if(id == currentCustomer->getAccounts().at(j)->getID()){
+                            toprint = true;
+                        }
                     }
                 }
                 if(toprint || manager){ 
@@ -603,11 +617,22 @@ void BankManager::addCustomer(){
     in >> pass;
     customer->setPass(pass);
 
+    customer->setID(customers.size()+1);
+    out << "Address: ";
+    //in >> address;
+    //in.ignore();
+    getline(in, address);
+    
+    getline(in, address);   
+    customer->setAddress(address); 
+    
+    customers.push_back(customer);
+    
+    
     out << "Add new account or connect old (new/old)? ";
     in >> choice;
     if(choice == "new"){
-        addAccount(customers.size()+1);
-        id = customers.size()+1;
+        addAccount(customers.size());
     }
     else if(choice == "old"){
         out << "Account ID: ";
@@ -619,25 +644,16 @@ void BankManager::addCustomer(){
             }
         }
     }
-    customer->setID(customers.size()+1);
-    out << "Address: ";
-    //in >> address;
-    //in.ignore();
-    getline(in, address);
     
-    getline(in, address);   
-    customer->setAddress(address);
-    
-    
-    customers.push_back(customer);
 }
 
 void BankManager::addAccount(int custID){
     string type;
     double balance;
-    int id;
+    int id = custID;
     out << "Opening Balance: ";
     in >> balance;
+    
     if(custID == 0){
         out << "Customer ID: "; 
         in >> id;
@@ -650,13 +666,13 @@ void BankManager::addAccount(int custID){
         cTemp->setBalance(balance);
         cTemp->setDate(currentDate);
         cTemp->setID(accounts.size()+1);
-        accounts.push_back(cTemp);
         for(unsigned i = 0; i < customers.size(); i++){
             if(customers.at(i)->getID() == id){
                 customers.at(i)->accountNums.push_back(accounts.size()+1);
                 customers.at(i)->addAccount(cTemp);
             }
         }
+        accounts.push_back(cTemp);
     }
     //make savings account
     else if(type == "s" || type == "S"){
@@ -664,13 +680,13 @@ void BankManager::addAccount(int custID){
         sTemp->setBalance(balance);
         sTemp->setDate(currentDate);
         sTemp->setID(accounts.size()+1);
-        accounts.push_back(sTemp);
         for(unsigned i = 0; i < customers.size(); i++){
             if(customers.at(i)->getID() == id){
                 customers.at(i)->accountNums.push_back(accounts.size()+1);
                 customers.at(i)->addAccount(sTemp);
             }
         }
+        accounts.push_back(sTemp);
     }
     //make certificate of deposit account
     else if(type == "cd" || type == "CD"){
@@ -682,13 +698,13 @@ void BankManager::addAccount(int custID){
         out << "Maturity Date: ";
         in >> d;
         cdTemp->setMaturityDate(d);
-        accounts.push_back(cdTemp);
         for(unsigned i = 0; i < customers.size(); i++){
             if(customers.at(i)->getID() == id){
                 customers.at(i)->accountNums.push_back(accounts.size()+1);
                 customers.at(i)->addAccount(cdTemp);
             }
         }
+        accounts.push_back(cdTemp);
     }
 }
 
